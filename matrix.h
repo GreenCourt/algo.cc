@@ -6,8 +6,8 @@ Matrix matmul(const Matrix &A, const Matrix &B, int mod=0) {
   int n = A.size(), m=A[0].size(), l=B[0].size();
   Matrix C(n, Vector(l));
   for(int i=0; i<m; i++) for(int j=0; j<n; j++) for(int k=0; k<l; k++) {
-    C[j][k] += A[j][i] * B[i][k];
-    if(mod) C[j][k] %= mod;
+    if(mod) C[j][k] = (C[j][k] + ((A[j][i]%mod) * (B[i][k]%mod) % mod)) % mod;
+    else C[j][k] += A[j][i] * B[i][k];
   }
   return C;
 }
@@ -17,8 +17,8 @@ Vector matmul(const Matrix &A, const Vector &b, int mod=0) {
   int n = A.size(), m=A[0].size();
   Vector C(n);
   for(int i=0; i<m; i++) for(int j=0; j<n; j++) {
-    C[j] += A[j][i] * b[i];
-    if(mod) C[j] %= mod;
+    if(mod) C[j] = (C[j] + (((A[j][i]%mod) * (b[i]%mod))%mod)) % mod;
+    else C[j] += A[j][i] * b[i];
   }
   return C;
 }
