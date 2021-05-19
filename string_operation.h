@@ -1,10 +1,10 @@
-vector<string> split(const string &s, char delimiter) {
+vector<string> split(const string &s, char delimiter, bool keep_empty=false) {
   vector<string> r; string t;
   for(char c:s) {
-    if(c==delimiter){if(!t.empty()) r.push_back(t); t.clear();}
+    if(c==delimiter){if(!t.empty()||keep_empty) r.push_back(t); t.clear();}
     else t += c;
   }
-  if (!t.empty()) r.push_back(t);
+  if (!t.empty()||keep_empty) r.push_back(t);
   return r;
 }
 
