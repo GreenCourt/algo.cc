@@ -15,7 +15,6 @@ struct Line {
     else s = Point(0, C / B), t = Point(C / A, 0);
   }
   friend ostream &operator<<(ostream &os, Line &p) { return os << p.s << " --> " << p.t; }
-  friend istream &operator>>(istream &is, Line &p) { return is >> p.s >> p.t; }
 };
 
 struct Segment {
@@ -23,7 +22,6 @@ struct Segment {
   Segment() = default;
   Segment(const Point& s, const Point& t) : s(s), t(t) {}
   friend ostream &operator<<(ostream &os, Segment &p) { return os << p.s << " --> " << p.t; }
-  friend istream &operator>>(istream &is, Segment &p) { return is >> p.s >> p.t; }
 };
 
 using Polygon = vector<Point>;
@@ -39,15 +37,22 @@ Point rotate(Float theta_radian, const Point &p) {
 }
 Point rotate90(const Point &p) {return Point(-p.imag(), p.real());}
 
+inline bool coordinate_lt(const Point& a, const Point& b) { return sgn(real(a-b)) ? real(a-b) < 0 : sgn(imag(a-b)) < 0; }
+inline bool coordinate_gt(const Point& a, const Point& b) { return sgn(real(a-b)) ? real(a-b) > 0 : sgn(imag(a-b)) > 0; }
+inline bool coordinate_eq(const Point& a, const Point& b) { return sgn(real(a-b)) == 0 && sgn(imag(a-b)) == 0; }
+inline bool arg_lt(const Point& a, const Point& b) { return sgn(arg(a)-arg(b))<0; }
+inline bool arg_gt(const Point& a, const Point& b) { return sgn(arg(a)-arg(b))>0; }
+inline bool arg_eq(const Point& a, const Point& b) { return sgn(arg(a)-arg(b))==0;}
+
 namespace std {
 #if 1 // compare by coordinates
-  bool operator<(const Point& a, const Point& b) { return sgn(real(a-b)) ? real(a-b) < 0 : sgn(imag(a-b)) < 0; }
-  bool operator>(const Point& a, const Point& b) { return sgn(real(a-b)) ? real(a-b) > 0 : sgn(imag(a-b)) > 0; }
-  bool operator==(const Point& a, const Point& b) { return sgn(real(a-b)) == 0 && sgn(imag(a-b)) == 0; }
+  bool operator<(const Point& a, const Point& b) { return coordinate_lt(a,b); }
+  bool operator>(const Point& a, const Point& b) { return coordinate_gt(a,b); }
+  bool operator==(const Point& a, const Point& b) { return coordinate_eq(a,b); }
 #else // compare by arguments
-  bool operator<(const Point& a, const Point& b) { return sgn(arg(a)-arg(b))<0; }
-  bool operator>(const Point& a, const Point& b) { return sgn(arg(a)-arg(b))>0; }
-  bool operator==(const Point& a, const Point& b) { return sgn(arg(a)-arg(b))==0;}
+  bool operator<(const Point& a, const Point& b) { return arg_lt(a,b);}
+  bool operator>(const Point& a, const Point& b) { return arg_gt(a,b);}
+  bool operator==(const Point& a, const Point& b) { return arg_eq(a,b);}
 #endif
 }
 
