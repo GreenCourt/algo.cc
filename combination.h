@@ -1,17 +1,14 @@
 struct combination {
-  /* initialize: O(n) */
+  /* initialize: O(n^2) */
   /* choose    : O(1) */
-  vector<long long> fact;
-  combination(int n=1) : fact(n+1) {
-    fact[0] = 1, fact[1] = 1;
-    for (int i = 2; i <= n; i++) fact[i] = fact[i - 1] * i;
+  vector<vector<long long>> c;
+  combination(int n=1) : c(n+1, vector<long long>(n+1)) {
+    c[0][0] = 1;
+    for(int i=0; i<n; ++i) for(int j=0; j<=i; ++j)
+      c[i+1][j] += c[i][j], c[i+1][j+1] += c[i][j];
   }
-  long long choose(int n, int k) { return fact[n] / fact[k] / fact[n - k]; }
+  long long choose(int n, int k) {
+    assert(n>=0 && n<c.size() && k>=0 && k <= n);
+    return c[n][k];
+  }
 };
-
-long long choose(int n, int k) {
-    /* O(k) */
-    long long ret = 1;
-    for(long long i = 1; i <= k; ++i) ret = (ret * n--) / i;
-    return ret;
-}
