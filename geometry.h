@@ -7,31 +7,29 @@ using Vector = Point;
 istream& operator>>(istream& is, Point& p) {Float x,y; is >> x >> y; p = Point(x,y); return is; }
 ostream& operator<<(ostream& os, const Point& p) {os<<"("<<p.real()<<","<<p.imag()<<")"; return os;}
 
-struct Line {
-  Point s,t;
+struct Line : public array<Point, 2> {
   Line() = default;
-  Line(Point s, Point t) : s(s), t(t) {}
+  Line(const Point &p1, const Point &p2) { (*this)[0] = p1, (*this)[1] = p2; }
   Line(Float A, Float B, Float C) { // Ax+By=C
-    if(sgn(A)==0) s = Point(0, C / B), t = Point(1, C / B);
-    else if(sgn(B)==0) s = Point(C / A, 0), t = Point(C / A, 1);
-    else s = Point(0, C / B), t = Point(C / A, 0);
+    if(sgn(A)==0) (*this)[0] = Point(0, C / B), (*this)[1] = Point(1, C / B);
+    else if(sgn(B)==0) (*this)[0] = Point(C / A, 0), (*this)[1] = Point(C / A, 1);
+    else (*this)[0] = Point(0, C / B), (*this)[1] = Point(C / A, 0);
   }
-  friend ostream &operator<<(ostream &os, Line &p) { return os << p.s << " --> " << p.t; }
+  friend ostream &operator<<(ostream &os, Line &p) { return os << p[0] << " --> " << p[1]; }
 };
 
-struct Segment {
-  Point s,t;
+struct Segment : public array<Point, 2> {
   Segment() = default;
-  Segment(const Point& s, const Point& t) : s(s), t(t) {}
-  friend ostream &operator<<(ostream &os, Segment &p) { return os << p.s << " --> " << p.t; }
+  Segment(const Point &p1, const Point &p2) { (*this)[0] = p1, (*this)[1] = p2; }
+  friend ostream &operator<<(ostream &os, Segment &p) { return os << p[0] << " --> " << p[1]; }
 };
 
 using Polygon = vector<Point>;
 
 struct Circle {
-  Point p; Float r;
+  Point center; Float r;
   Circle() = default;
-  Circle(Point p, Float r) : p(p), r(r) {}
+  Circle(const Point& center, Float r) : center(center), r(r) {}
 };
 
 Point operator*(const Point &p, const Float &d) { return Point(p.real()*d, p.imag()*d); }
@@ -65,14 +63,14 @@ Float dot(const Point &a, const Point &b){return a.real()*b.real()+a.imag()*b.im
 Float cross(const Point &a, const Point &b) {return a.real()*b.imag()-a.imag()*b.real();} // |a||b|sin()
 
 bool is_parallel(const Point &a, const Point &b) {return sgn(cross(a,b)) == 0;}
-bool is_parallel(const Line &a, const Line &b) {return sgn(cross(a.t - a.s, b.t - b.s)) == 0;}
-bool is_parallel(const Segment &a, const Segment &b) {return sgn(cross(a.t - a.s, b.t - b.s)) == 0;}
-bool is_parallel(const Line &a, const Segment &b) {return sgn(cross(a.t - a.s, b.t - b.s)) == 0;}
+bool is_parallel(const Line &a, const Line &b) {return sgn(cross(a[1] - a[0], b[1] - b[0])) == 0;}
+bool is_parallel(const Segment &a, const Segment &b) {return sgn(cross(a[1] - a[0], b[1] - b[0])) == 0;}
+bool is_parallel(const Line &a, const Segment &b) {return sgn(cross(a[1] - a[0], b[1] - b[0])) == 0;}
 
 bool is_orthogobal(const Point &a, const Point &b) {return sgn(dot(a,b)) == 0;}
-bool is_orthogobal(const Line &a, const Line &b) {return sgn(dot(a.t - a.s, b.t - b.s)) == 0;}
-bool is_orthogobal(const Segment &a, const Segment &b) {return sgn(dot(a.t - a.s, b.t - b.s)) == 0;}
-bool is_orthogobal(const Line &a, const Segment &b) {return sgn(dot(a.t - a.s, b.t - b.s)) == 0;}
+bool is_orthogobal(const Line &a, const Line &b) {return sgn(dot(a[1] - a[0], b[1] - b[0])) == 0;}
+bool is_orthogobal(const Segment &a, const Segment &b) {return sgn(dot(a[1] - a[0], b[1] - b[0])) == 0;}
+bool is_orthogobal(const Line &a, const Segment &b) {return sgn(dot(a[1] - a[0], b[1] - b[0])) == 0;}
 
 int ccw(const Point &s, Point t, Point x) {
   t = t - s, x = x - s;
@@ -86,17 +84,17 @@ int ccw(const Point &s, Point t, Point x) {
 Float radian2degree(const Float &radian) {return radian * 180.0 / PI;}
 Float degree2radian(const Float &degree) {return degree * PI / 180.0;}
 
-Point projection(const Line &l, const Point &p){return l.s+(dot(p-l.s, l.t-l.s)/norm(l.t-l.s))*(l.t-l.s);}
-Point projection(const Segment &l, const Point &p){return l.s+(dot(p-l.s, l.t-l.s)/norm(l.t-l.s))*(l.t-l.s);}
+Point projection(const Line &l, const Point &p){return l[0]+(dot(p-l[0], l[1]-l[0])/norm(l[1]-l[0]))*(l[1]-l[0]);}
+Point projection(const Segment &l, const Point &p){return l[0]+(dot(p-l[0], l[1]-l[0])/norm(l[1]-l[0]))*(l[1]-l[0]);}
 Point reflection(const Line &l, const Point &p){return p+(projection(l,p)-p)*2.0;}
-bool same(const Line &a, const Line &b){return (sgn(cross(a.t-a.s, b.t-b.s))==0)&&(sgn(cross(a.t-a.s, b.s-a.s)==0));}
+bool same(const Line &a, const Line &b){return (sgn(cross(a[1]-a[0], b[1]-b[0]))==0)&&(sgn(cross(a[1]-a[0], b[0]-a[0])==0));}
 
-bool intersect(const Line &l, const Point &p) { return abs(ccw(l.s, l.t, p)) != 1; }
-bool intersect(const Line &a, const Line &b) { return sgn(cross(a.t-a.s, b.t-b.s))!=0 || sgn(cross(a.t-a.s, b.t-a.s))==0; }
-bool intersect(const Segment &s, const Point &p) { return ccw(s.s, s.t, p) == 0; }
-bool intersect(const Line &l, const Segment &s) { return sgn(cross(l.t-l.s, s.s-l.s)*cross(l.t-l.s, s.t-l.s)) <= 0; }
+bool intersect(const Line &l, const Point &p) { return abs(ccw(l[0], l[1], p)) != 1; }
+bool intersect(const Line &a, const Line &b) { return sgn(cross(a[1]-a[0], b[1]-b[0]))!=0 || sgn(cross(a[1]-a[0], b[1]-a[0]))==0; }
+bool intersect(const Segment &s, const Point &p) { return ccw(s[0], s[1], p) == 0; }
+bool intersect(const Line &l, const Segment &s) { return sgn(cross(l[1]-l[0], s[0]-l[0])*cross(l[1]-l[0], s[1]-l[0])) <= 0; }
 bool intersect(const Segment &a, const Segment &b) {
-  return ccw(a.s, a.t, b.s)*ccw(a.s, a.t, b.t) <= 0 && ccw(b.s, b.t, a.s)*ccw(b.s, b.t, a.t) <= 0;
+  return ccw(a[0], a[1], b[0])*ccw(a[0], a[1], b[1]) <= 0 && ccw(b[0], b[1], a[0])*ccw(b[0], b[1], a[1]) <= 0;
 }
 int number_of_common_tangents(const Circle& c1, const Circle& c2);
 int intersect(const Circle &c1, const Circle &c2) {
@@ -107,80 +105,80 @@ int intersect(const Circle &c1, const Circle &c2) {
 }
 Float distance(const Line& l, const Point& p);
 int intersect(const Circle &c, const Line &l) {
-  Float d = distance(l, c.p);
+  Float d = distance(l, c.center);
   if(sgn(d - c.r) == 0) return 1;
   else if(sgn(d - c.r) < 0) return 2;
   else return 0;
 }
 int intersect(const Circle &c, const Segment &s) {
-  if(sgn(norm(projection(s, c.p) - c.p) - c.r * c.r) > 0) return 0;
-  auto d1 = abs(c.p - s.s), d2 = abs(c.p - s.t);
+  if(sgn(norm(projection(s, c.center) - c.center) - c.r * c.r) > 0) return 0;
+  auto d1 = abs(c.center - s[0]), d2 = abs(c.center - s[1]);
   if(sgn(d1-c.r) < 0 && sgn(d2-c.r) < 0) return 0;
   if((sgn(d1-c.r) < 0 && sgn(d2-c.r) >= 0) || (sgn(d1-c.r) >= 0 && sgn(d2-c.r) < 0)) return 1;
-  const Point h = projection(s, c.p);
-  if(sgn(dot(s.s - h, s.t - h)) < 0) return 2;
+  const Point h = projection(s, c.center);
+  if(sgn(dot(s[0] - h, s[1] - h)) < 0) return 2;
   if(sgn(d1-c.r) == 0 || sgn(d2-c.r) == 0) return 1;
   return 0;
 }
 
 Float distance(const Point& a, const Point& b) { return abs(a - b); }
-Float distance(const Line& l, const Point& p){return abs(cross(l.t-l.s, p-l.s)) / abs(l.t-l.s);}
+Float distance(const Line& l, const Point& p){return abs(cross(l[1]-l[0], p-l[0])) / abs(l[1]-l[0]);}
 Float distance(const Segment& s, const Point& p){
-  if (sgn(dot(s.t-s.s,p-s.s)) < 0 || sgn(dot(s.s-s.t,p-s.t) < 0)) return min(abs(s.s-p), abs(s.t-p));
-  return abs(cross(s.t-s.s, p-s.s)) / abs(s.t-s.s);
+  if (sgn(dot(s[1]-s[0],p-s[0])) < 0 || sgn(dot(s[0]-s[1],p-s[1]) < 0)) return min(abs(s[0]-p), abs(s[1]-p));
+  return abs(cross(s[1]-s[0], p-s[0])) / abs(s[1]-s[0]);
 }
 Float distance(const Segment& a, const Segment& b){
   if(intersect(a,b)) return 0;
-  return min({distance(a, b.s), distance(a, b.t), distance(b, a.s), distance(b, a.t)});
+  return min({distance(a, b[0]), distance(a, b[1]), distance(b, a[0]), distance(b, a[1])});
 }
-Float distance(const Line &a, const Line &b) { return intersect(a, b) ? 0 : distance(a, b.s); }
+Float distance(const Line &a, const Line &b) { return intersect(a, b) ? 0 : distance(a, b[0]); }
 Float distance(const Line &l, const Segment &s) {
   if(intersect(l, s)) return 0;
-  return min(distance(l, s.s), distance(l, s.t));
+  return min(distance(l, s[0]), distance(l, s[1]));
 }
 
 Point cross_point(const Segment& s1, const Segment& s2) {
   assert(intersect(s1,s2));
   assert(!is_parallel(s1, s2));
-  return s1.s + abs(cross(s2.t - s1.s, s2.t-s2.s) / cross(s1.t-s1.s, s2.t-s2.s)) * (s1.t-s1.s);
+  return s1[0] + abs(cross(s2[1] - s1[0], s2[1]-s2[0]) / cross(s1[1]-s1[0], s2[1]-s2[0])) * (s1[1]-s1[0]);
 }
 Point cross_point(const Line& l1, const Line& l2) {
   assert(!is_parallel(l1, l2));
-  return l1.s + (cross(l2.t-l1.s, l2.t-l2.s) / cross(l1.t-l1.s, l2.t-l2.s)) * (l1.t-l1.s);
+  return l1[0] + (cross(l2[1]-l1[0], l2[1]-l2[0]) / cross(l1[1]-l1[0], l2[1]-l2[0])) * (l1[1]-l1[0]);
 }
 Point cross_point(const Line& l, const Segment& s) {
   assert(intersect(l,s));
-  return cross_point(l, Line(s.s, s.t));
+  return cross_point(l, Line(s[0], s[1]));
 }
 vector<Point> cross_point(const Circle& c, const Line& l) {
-  if(sgn(distance(l, c.p) - c.r) > 0) return vector<Point>();
-  Point pr = projection(l, c.p);
-  if(sgn(distance(l, c.p) - c.r) == 0) return {pr};
-  Vector e = (l.t-l.s) / abs(l.t-l.s);;
-  Float base=sqrt(c.r*c.r-norm(pr-c.p));
+  if(sgn(distance(l, c.center) - c.r) > 0) return vector<Point>();
+  Point pr = projection(l, c.center);
+  if(sgn(distance(l, c.center) - c.r) == 0) return {pr};
+  Vector e = (l[1]-l[0]) / abs(l[1]-l[0]);;
+  Float base=sqrt(c.r*c.r-norm(pr-c.center));
   return {pr+e*base, pr-e*base};
 }
 vector<Point> cross_point(const Circle &c, const Segment &s) {
-  Line l = Line(s.s, s.t);
+  Line l = Line(s[0], s[1]);
   int is = intersect(c, s);
   if(is == 0) return {};
   auto cp = cross_point(c, l);
   if(is == 2) {
-    // order in s.s - cp[0] - cp[1] - s.t
-    if(ccw(s.s, cp.back(), cp.front()) == -2) swap(cp[0],cp[1]);
+    // order in s[0] - cp[0] - cp[1] - s[1]
+    if(ccw(s[0], cp.back(), cp.front()) == -2) swap(cp[0],cp[1]);
     return cp;
   }
-  if(ccw(s.s, s.t, cp[0]) == 0 ) return {cp[0]};
+  if(ccw(s[0], s[1], cp[0]) == 0 ) return {cp[0]};
   else return {cp[1]};
 }
 vector<Point> cross_point(const Circle& c1, const Circle& c2) {
-  Float d = abs(c1.p-c2.p);
+  Float d = abs(c1.center-c2.center);
   Float rc = (d*d + c1.r*c1.r - c2.r*c2.r) / (2*d);
   Float rs = sqrt(c1.r*c1.r-rc*rc);
-  Vector e = (c2.p-c1.p) / d;
+  Vector e = (c2.center-c1.center) / d;
   if(isnan(rs)) return vector<Point>();
-  if(sgn(rs==0)) return {c1.p + e * Vector(rc,rs)};
-  return {c1.p + e * Vector(rc,rs), c1.p + e * Vector(rc,-rs)};
+  if(sgn(rs==0)) return {c1.center + e * Vector(rc,rs)};
+  return {c1.center + e * Vector(rc,rs), c1.center + e * Vector(rc,-rs)};
 }
 
 Float signed_area(const Polygon& p) {
@@ -216,14 +214,14 @@ int contains(const Polygon& poly, const Point& p) {
 }
 
 bool contains(const Circle &c, const Point &p) {
-  Float d = abs(p - c.p);
+  Float d = abs(p - c.center);
   if (sgn(d - c.r) == 0) return 2;     // on the edge
   else if (sgn(d - c.r) < 0) return 1; // inside
   else return 0;                       // outside
 }
 
 int number_of_common_tangents(const Circle& c1, const Circle& c2) {
-  Float d = abs(c1.p-c2.p);
+  Float d = abs(c1.center-c2.center);
   if(sgn(d-(c1.r+c2.r)) > 0 )                           return 4; // no intersection (outside)
   else if(sgn(d-(c1.r+c2.r)) == 0 )                     return 3; // one intersection (circumscribed)
   else if(sgn((c1.r+d)-c2.r)==0||sgn((c2.r+d)-c1.r)==0) return 1; // one intersection (inscribed)
@@ -249,24 +247,24 @@ Circle circumscribed_circle(const Point& p1, const Point& p2, const Point& p3) {
   return Circle(center, r);
 }
 
-vector<Point> tangent(const Circle &c, const Point &p) {return cross_point(c,Circle(p,sqrt(norm(c.p-p)-c.r*c.r)));}
+vector<Point> tangent(const Circle &c, const Point &p) {return cross_point(c,Circle(p,sqrt(norm(c.center-p)-c.r*c.r)));}
 
 vector<Line> tangent(Circle c1, Circle c2) {
   vector<Line> ret;
   if(c1.r < c2.r) swap(c1, c2);
-  Float d = abs(c1.p - c2.p);
+  Float d = abs(c1.center - c2.center);
   if(sgn(d)==0) return ret;
-  Point u = (c2.p - c1.p) / d;
+  Point u = (c2.center - c1.center) / d;
   Point v = rotate90(u);
   for(int s : {-1, 1}) {
     Float h = (c1.r + s * c2.r) / d;
     if(sgn(1-h*h) == 0) {
-      ret.emplace_back(c1.p + u * c1.r, c1.p + (u + v) * c1.r);
+      ret.emplace_back(c1.center + u * c1.r, c1.center + (u + v) * c1.r);
     }
     else if(1-h*h > 0) {
       Point uu = u * h, vv = v * sqrt(1-h*h);
-      ret.emplace_back(c1.p + (uu + vv) * c1.r, c2.p - (uu + vv) * c2.r * s);
-      ret.emplace_back(c1.p + (uu - vv) * c1.r, c2.p - (uu - vv) * c2.r * s);
+      ret.emplace_back(c1.center + (uu + vv) * c1.r, c2.center - (uu + vv) * c2.r * s);
+      ret.emplace_back(c1.center + (uu - vv) * c1.r, c2.center - (uu - vv) * c2.r * s);
     }
   }
   return ret;
@@ -280,8 +278,8 @@ Float intersection_area(const Circle &c, const Polygon &poly) {
   Float area = 0;
   const int n = poly.size();
   for(int i=0;i<n;++i){
-    const Point &p1 = poly[i] - c.p, &p2 = poly[(i + 1) % n] - c.p;
-    if(abs(ccw(c.p, p1, p2)) != 1) continue;
+    const Point &p1 = poly[i] - c.center, &p2 = poly[(i + 1) % n] - c.center;
+    if(abs(ccw(c.center, p1, p2)) != 1) continue;
     if(sgn(abs(p1)-c.r) < 0 && sgn(abs(p2) - c.r) < 0) {
       area += 0.5 * cross(p1, p2);
     }
@@ -316,7 +314,7 @@ Float intersection_area(const Circle &c1, const Circle &c2) {
   if(ct==0 || ct==1) return min(c1.r*c1.r*PI, c2.r*c2.r*PI);
   auto cp = cross_point(c1,c2);
   assert(cp.size() == 2);
-  Float d = abs(c1.p - c2.p), r1 = c1.r, r2 = c2.r;
+  Float d = abs(c1.center - c2.center), r1 = c1.r, r2 = c2.r;
   Float area = 0;
   Float a1 = acos((r1*r1-r2*r2+d*d)/(2*d*r1));
   Float a2 = acos((r2*r2-r1*r1+d*d)/(2*d*r2));
