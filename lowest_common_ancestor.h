@@ -33,7 +33,6 @@ struct LowestCommonAncestor {
     first_appear.assign(n, -1);
     eular_tour.reserve(2*n-1);
     dfs(root, 0, adj);
-    depth[root] = 0;
     st = SparseTable(eular_tour);
   }
   void dfs(int v, int d, const vector<vector<edge>>& adj) {
