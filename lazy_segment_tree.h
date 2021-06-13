@@ -40,6 +40,7 @@ struct lazy_segment_tree {
     /* O(log n) */
     assert(l >=0 && l <= n);
     assert(r >=0 && r <= n);
+    assert(l <= r);
     vr = (vr==-1) ? leafs : vr;
     lazy_update(v);
     if(l<=vl && vr<=r) return node[v];
@@ -53,6 +54,7 @@ struct lazy_segment_tree {
     /* O(log n) */
     assert(l >=0 && l <= n);
     assert(r >=0 && r <= n);
+    assert(l <= r);
     vr = (vr==-1) ? leafs : vr;
     lazy_update(v);
     if(l >= vr || r <= vl) return;
@@ -77,6 +79,7 @@ struct lazy_segment_tree {
 
   void set(int index, S s) {
     /* O(log n) */
+    assert(0 <= index && index < n);
     int v = index + (leafs-1);
     lazy_update_all_ancestors(v);
     node[v] = s;
@@ -85,6 +88,7 @@ struct lazy_segment_tree {
 
   S get(int index) {
     /* O(log n) */
+    assert(0 <= index && index < n);
     int v = index + (leafs-1);
     lazy_update_all_ancestors(v);
     lazy_update(v);
