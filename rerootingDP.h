@@ -37,7 +37,7 @@ struct RerootingDP {
     return opV(x, vertex_info[v]);
   }
 
-  void reroot(int v, int p=-1, const S& pval=0) {
+  void reroot(int v, int p=-1, const S& pval=e()) {
     int deg = adj[v].size();
     for(int i=0; i<deg; i++) if(adj[v][i] == p) {
       dp[v][i] = pval;
@@ -51,7 +51,7 @@ struct RerootingDP {
     for(int i=0; i<deg; i++) {
       int u = adj[v][i];
       if (u == p) continue;
-      reroot(u, v, opE(opS(sumL[i], sumR[i+1]), edge_info[v][i]));
+      reroot(u, v, opE(opV(opS(sumL[i], sumR[i+1]), vertex_info[v]), edge_info[v][i]));
     }
   }
 };
