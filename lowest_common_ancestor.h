@@ -27,7 +27,7 @@ struct LowestCommonAncestor {
   SparseTable<pair<int,int>> st;
   vector<int> depth, parent;
   LowestCommonAncestor(const vector<vector<edge>>& adj, int root = 0) { /* O(n log n) */
-    int n = adj.size();
+    int n = adj.size(); if(n==0) return;
     depth.assign(n, -1);
     parent.assign(n, -1);
     first_appear.assign(n, -1);
