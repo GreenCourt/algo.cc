@@ -1,6 +1,6 @@
 template<typename T>
 struct StringMatching {
-  T pattern;
+  const T& pattern;
   vector<int> f;
   StringMatching() = default;
   StringMatching(const T& pattern): pattern(pattern), f(vector<int>(pattern.size()+1)) {
