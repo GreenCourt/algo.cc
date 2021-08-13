@@ -1,8 +1,7 @@
 struct StronglyConnectedComponent {
-  /* O(|V|+|E|) */
-  vector<vector<int>> groups;
-  vector<int> group_number; // for each vertex
-  /* ------------------- */
+  vector<vector<int>> groups; // topologically sorted groups
+  vector<int> group_number;   // for each vertex
+  /* ------------------------ */
   const int n;
   const vector<vector<int>>& adj;
   vector<vector<int>> radj;
@@ -19,6 +18,7 @@ struct StronglyConnectedComponent {
     for(int u : radj[v]) if(group_number[u]==-1) rdfs(u);
   }
   StronglyConnectedComponent(const vector<vector<int>>& adj) : n(adj.size()), adj(adj) {
+    /* O(|V|+|E|) */
     order.reserve(n); visited.assign(n,false);
     for(int v=0;v<n; ++v) if(!visited[v]) dfs(v);
     radj.resize(n);
