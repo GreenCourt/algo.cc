@@ -101,70 +101,65 @@ struct lazy_segment_tree {
 using S = long long;
 using F = long long;
 const S INF = 1e18;
-S op(S a, S b){ return min(a, b); }
+S op(S l, S r){ return min(l, r); }
 S e(){ return INF; }
-S mapping(F f, S x){ return f+x; }
-F composition(F f, F g){ return f+g; }
+S mapping(F f, S s){ return f+s; }
+F composition(F f, F g){ return f+g; } // f.g = f(g(s))
 F id(){ return 0; }
 #endif
 
 #if 0 /* Range Max, Range Add */
 using S = long long;
-using S = long long;
 using F = long long;
 const S INF = 1e18;
-S op(S a, S b){ return max(a, b); }
+S op(S l, S r){ return max(l, r); }
 S e(){ return -INF; }
-S mapping(F f, S x){ return f+x; }
-F composition(F f, F g){ return f+g; }
+S mapping(F f, S s){ return f+s; }
+F composition(F f, F g){ return f+g; } // f.g = f(g(s))
 F id(){ return 0; }
 #endif
 
 #if 0 /* Range Minimum, Range Update */
 using S = long long;
-using S = long long;
 using F = long long;
 const S INF = 1e18;
 const F ID = 1e18;
-S op(S a, S b){ return std::min(a, b); }
+S op(S l, S r){ return min(l, r); }
 S e(){ return INF; }
-S mapping(F f, S x){ return (f == ID ? x : f); }
-F composition(F f, F g){ return (f == ID ? g : f); }
+S mapping(F f, S s){ return (f == ID ? s : f); }
+F composition(F f, F g){ return (f == ID ? g : f); } // f.g = f(g(s))
 F id(){ return ID; } 
 #endif
 
 #if 0 /* Range Max, Range Update */
 using S = long long;
-using S = long long;
 using F = long long;
 const S INF = 1e18;
 const F ID = 1e18;
-S op(S a, S b){ return std::max(a, b); }
+S op(S l, S r){ return max(l, r); }
 S e(){ return -INF; }
-S mapping(F f, S x){ return (f == ID ? x : f); }
-F composition(F f, F g){ return (f == ID ? g : f); }
+S mapping(F f, S s){ return (f == ID ? s : f); }
+F composition(F f, F g){ return (f == ID ? g : f); } // f.g = f(g(s))
 F id(){ return ID; }
 #endif
 
 #if 0 /* Range Sum, Range Update */
-using S = long long;
 struct S{ long long value; int size; };
 using F = long long;
 const F ID = 1e18;
-S op(S a, S b){ return {a.value+b.value, a.size+b.size}; }
+S op(S l, S r){ return {l.value+r.value, l.size+r.size}; }
 S e(){ return {0, 0}; }
-S mapping(F f, S x){ if(f != ID) x.value = f*x.size; return x; }
-F composition(F f, F g){ return (f == ID ? g : f); }
+S mapping(F f, S s){ if(f != ID) s.value = f*s.size; return s; }
+F composition(F f, F g){ return (f == ID ? g : f); } // f.g = f(g(s))
 F id(){ return ID; }
 #endif
 
 #if 0 /* Range Sum, Range Add */
-using S = long long;
 struct S{ long long value; int size; };
 using F = long long;
-S op(S a, S b){ return {a.value+b.value, a.size+b.size}; }
+S op(S l, S r){ return {l.value+r.value, l.size+r.size}; }
 S e(){ return {0, 0}; }
-S mapping(F f, S x){ return {x.value + f*x.size, x.size}; }
-F composition(F f, F g){ return f+g; }
+S mapping(F f, S s){ return {s.value + f*s.size, s.size}; }
+F composition(F f, F g){ return f+g; } // f.g = f(g(s))
 F id(){ return 0; }
 #endif
