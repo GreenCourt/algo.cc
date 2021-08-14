@@ -1,12 +1,14 @@
 struct UnionFind {
   vector<int> data;
-  UnionFind(int size=0) : data(size, -1) { }
+  int number_of_groups;
+  UnionFind(int size=0) : data(size, -1), number_of_groups(size) { }
   bool unite(int x, int y) {
     x = root(x); y = root(y);
     if (x != y) {
       if (data[y] < data[x]) swap(x, y);
       data[x] += data[y]; data[y] = x;
     }
+    number_of_groups -= (x!=y);
     return x != y;
   }
   bool find(int x, int y) { return root(x) == root(y); }
