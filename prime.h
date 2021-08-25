@@ -42,3 +42,23 @@ bool is_prime(int n){
   for(int i=2;i*i<=n;i++) if(n%i==0) return false;
   return true;
 }
+
+vector<int> number_of_prime_factors(int n) {
+  /* O(n log log n) */
+  vector<int> r(n+1, 1); r[0] = 0;
+  for(int i=2; i<=n; i++) {
+    if(r[i]>1) continue;
+    for(int k=2; i*k <= n; k++) r[i*k] = r[i] + r[k];
+  }
+  return r;
+}
+
+vector<int> number_of_unique_prime_factors(int n) {
+  /* O(n log log n) */
+  vector<int> r(n+1, 0); r[1] = 1;
+  for(int i=2; i<=n; i++) {
+    if(r[i]) continue;
+    for(int k=i; k <= n; k+=i) r[k] += 1;
+  }
+  return r;
+}
