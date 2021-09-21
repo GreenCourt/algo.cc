@@ -13,35 +13,17 @@ struct sieve {
   bool is_prime(int x) {return f[x]==x;}
   template <typename T>
   vector<pair<T,int>> factors(T x) {
-    assert((long long)n*n >= x);
+    /* O(log x) */
+    assert(x <= n);
     vector<pair<T,int>> fc;
-    if( x<=n ) {
-      /* O(log x) */
-      while (x != 1) {
-        if (fc.size() && fc.back().first == f[x]) fc.back().second++;
-        else fc.emplace_back(f[x], 1);
-        x /= f[x];
-      }
-    }
-    else{
-      /* O(sqrt(x)) */
-      for (int p : primes) {
-        int c = 0;
-        while (x%p == 0) x /= p, ++c;
-        if (c != 0) fc.emplace_back(p,c);
-      }
-      if(x!=1) fc.emplace_back(x,1);
+    while (x != 1) {
+      if (fc.size() && fc.back().first == f[x]) fc.back().second++;
+      else fc.emplace_back(f[x], 1);
+      x /= f[x];
     }
     return fc;
   }
 };
-
-bool is_prime(int n){
-  /* O(sqrt n) */
-  if(n<=1) return false;
-  for(int i=2;i*i<=n;i++) if(n%i==0) return false;
-  return true;
-}
 
 vector<int> number_of_prime_factors(int n) {
   /* O(n log log n) */
@@ -62,3 +44,26 @@ vector<int> number_of_unique_prime_factors(int n) {
   }
   return r;
 }
+
+template <typename T>
+vector<pair<T,int>> prime_factors(T n){
+  /* O(sqrt n) */
+  vector<pair<T,int>> fc;
+  T x = n;
+  for(T i=2;i*i<=n;i++) {
+    int c=0;
+    while (x%i == 0) x /= i, ++c;
+    if(c) fc.emplace_back(i,c);
+  }
+  if(x!=1) fc.emplace_back(x,1);
+  return fc;
+}
+
+template <typename T>
+bool is_prime(T n){
+  /* O(sqrt n) */
+  if(n<=1) return false;
+  for(T i=2;i*i<=n;i++) if(n%i==0) return false;
+  return true;
+}
+
