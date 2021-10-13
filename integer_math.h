@@ -19,6 +19,7 @@ long long saturating_pow(long long a, int n, long long limit=(long long)1e18+1) 
 
 long long isqrt(long long x) {
   /* O(log x) */
+  /* return ceil(sqrt(x)) for an integer */
   if(x==0) return 0;
   long long sgn = x >= 0 ? 1 : -1;
   x = abs(x);
