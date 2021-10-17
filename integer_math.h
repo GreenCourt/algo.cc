@@ -19,10 +19,9 @@ long long saturating_pow(long long a, int n, long long limit=(long long)1e18+1) 
 
 long long isqrt(long long x) {
   /* O(log x) */
-  /* return ceil(sqrt(x)) for an integer */
-  if(x==0) return 0;
-  long long sgn = x >= 0 ? 1 : -1;
-  x = abs(x);
+  /* return floor(sqrt(x)) for a positive integer */
+  assert(x>=0);
+  if(x<=1) return x;
   auto f = [&](long long a) { return (a==0 || a <= x/a) && a*a<=x; };
   long long l = 0, r=x;
   bool fl = f(l), fr = f(r); assert(fl!=fr);
@@ -32,7 +31,7 @@ long long isqrt(long long x) {
     if(f(m)) T = m;
     else F = m;
   }
-  return T * sgn;
+  return T;
 }
 
 long long iceil(long long x, long long base) {
