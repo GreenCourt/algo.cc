@@ -19,3 +19,7 @@ bool is_palindrome(const string& s) {
   while(l<r) if(s[l++] != s[r--]) return false;
   return true;
 }
+
+string fill_left(const string& s, int length_after_filling, char c='0') {
+  return string(length_after_filling - s.length(), c) + s;
+}
