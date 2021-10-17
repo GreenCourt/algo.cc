@@ -51,3 +51,24 @@ long long ifloor(long long x, long long base) {
   if(negative) return -(x + ((x % base) ? base - (x % base) : 0)) ;
   else return x - (x % base);
 }
+
+long long ipow(long long a, int n) {
+  /* O(log n) */
+  assert(n>=0);
+  long long r = 1;
+  while (n > 0) {
+    if (n & 1) r *= a;
+    a *= a;
+    n >>= 1;
+  }
+  return r;
+}
+
+long long ilog(long long x, long long base=2) {
+  /* O(log x) */
+  // return ceil(log(x)) for an integer
+  assert(x >= 1);
+  long long logx = 1, p = base;
+  while(p < x) logx++, p*=base;
+  return logx;
+}
