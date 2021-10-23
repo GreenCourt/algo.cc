@@ -46,6 +46,14 @@ vector<int> number_of_unique_prime_factors(int n) {
 }
 
 template <typename T>
+bool is_prime(T n){
+  /* O(sqrt n) */
+  if(n<=1) return false;
+  for(T i=2;i*i<=n;i++) if(n%i==0) return false;
+  return true;
+}
+
+template <typename T>
 vector<pair<T,int>> prime_factors(T n){
   /* O(sqrt n) */
   vector<pair<T,int>> fc;
@@ -59,11 +67,9 @@ vector<pair<T,int>> prime_factors(T n){
   return fc;
 }
 
-template <typename T>
-bool is_prime(T n){
+long long euler_phi(long long n) {
   /* O(sqrt n) */
-  if(n<=1) return false;
-  for(T i=2;i*i<=n;i++) if(n%i==0) return false;
-  return true;
+  long long phi = n;
+  for(auto [f,c] : prime_factors(n)) phi = phi / f * (f-1);
+  return phi;
 }
-
