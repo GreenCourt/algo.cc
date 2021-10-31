@@ -21,6 +21,7 @@ struct UnionFind {
     for (int i = 0; i < n; i++) result[i].reserve(group_size[i]);
     for (int i = 0; i < n; i++) result[r[i]].push_back(i);
     result.erase(remove_if(result.begin(), result.end(), [&](const vector<int>& v) { return v.empty(); }), result.end());
+    assert(result.size() == number_of_groups);
     return result;
   }
 };
