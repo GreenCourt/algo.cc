@@ -41,7 +41,7 @@ vector<T> random_permutation(T mn, T mx) { // [mn, mx]
 }
 
 template<typename T>
-vector<pair<T,T>> random_pair(T mn, T mx, bool allow_same) { // [mn, mx]
+pair<T,T> random_pair(T mn, T mx, bool allow_same) { // [mn, mx]
   /* O(1) */
   assert(mn <= mx);
   T a = randint(mn, mx), b;
@@ -57,7 +57,7 @@ vector<pair<T,T>> random_pair(T mn, T mx, bool allow_same) { // [mn, mx]
 }
 
 template<typename T>
-vector<pair<T,T>> random_range(T mn, T mx, bool allow_same) { // [mn, mx]
+pair<T,T> random_range(T mn, T mx, bool allow_same) { // [mn, mx]
   /* O(1) */
   assert(mn <= mx);
   T l,r;
