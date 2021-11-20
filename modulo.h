@@ -1,6 +1,7 @@
 int modpow(long long a, long long n, int mod) {
   /* O(log n) */
   assert(a>=0 && n >= 0);
+  a %= mod;
   long long r = 1;
   while (n > 0) {
     if (n & 1) r = r * a % mod;
@@ -29,7 +30,7 @@ int choose(long long n, int k, int mod) {
   /* O(k log mod) */
   assert(n>=0 && k>=0);
   long long c = 1;
-  for(int i=1; i<=k; i++) c = (((c * (n-i+1)) % mod) * modinv(i, mod)) % mod; 
+  for(int i=1; i<=k; i++) c = (n-i+1) % mod * c % mod * modinv(i, mod) % mod; 
   return (int)c;
 }
 
@@ -37,6 +38,6 @@ int permutation(long long n, int k, int mod) {
   /* O(k log mod) */
   assert(n>=0 && k>=0);
   long long c = 1;
-  for(int i=n; i>n-k; --i) c = (c*i) % mod;
+  for(long long i=n; i>n-k; --i) c = i % mod * c % mod;
   return (int)c;
 }
