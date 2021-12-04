@@ -37,10 +37,10 @@ struct mod_combination {
     }
   }
   modint choose(int n, int k) { assert(n>=0 && k>=0); return n < k ? 0 : fact[n] * fact_inv[k] * fact_inv[n - k]; }
-  modint permutation(int n, int k) { assert(n>=0 && k>=0 && n>=k); return fact[n] * fact_inv[n - k]; }
+  modint permutation(int n, int k) { assert(n>=0 && k>=0); return n < k ? 0 : fact[n] * fact_inv[n - k]; }
 };
 
-modint choose(int n, int k) {
+modint choose(long long n, int k) {
   /* O(k log MOD) */
   assert(n>=0 && k>=0);
   modint c = 1;
@@ -48,10 +48,10 @@ modint choose(int n, int k) {
   return c;
 }
 
-modint permutation(int n, int k) {
+modint permutation(long long n, int k) {
   /* O(k) */
   assert(n>=0 && k>=0);
   modint c = 1;
-  for(int i=n; i>n-k; --i) c *= modint(i);
+  for(long long i=n; i>n-k; --i) c *= modint(i);
   return c;
 }
