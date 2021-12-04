@@ -35,7 +35,7 @@ int choose(long long n, int k, int mod) {
 }
 
 int permutation(long long n, int k, int mod) {
-  /* O(k log mod) */
+  /* O(k) */
   assert(n>=0 && k>=0);
   long long c = 1;
   for(long long i=n; i>n-k; --i) c = i % mod * c % mod;
