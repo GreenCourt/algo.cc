@@ -1,6 +1,6 @@
-//const int MOD = 998244353; // Are they coprime?
-const int MOD = 1000000007; // Are they coprime?
 struct modint {
+  //static const int MOD = 998244353; // Are they coprime?
+  static const int MOD = 1000000007; // Are they coprime?
   long long val;
   modint(long long val=0) : val((val % MOD + MOD) % MOD){}
   modint operator-() const { return modint(-val); }
@@ -23,35 +23,34 @@ struct modint {
   bool operator!=(const modint &p) const { return val != p.val; }
   friend ostream &operator<<(ostream &os, const modint &p) { return os << p.val; }
   friend istream &operator>>(istream &is, modint &a) { long long t; is >> t; a = modint(t); return (is); }
+  static modint choose(long long n, int k) {
+    /* O(k log MOD) */
+    assert(n>=0 && k>=0 && n < MOD && k < MOD);
+    modint c = 1;
+    for(int i=1; i<=k; i++) c *= modint(n-i+1) / i;
+    return c;
+  }
+  static modint permutation(long long n, int k) {
+    /* O(k) */
+    assert(n>=0 && k>=0);
+    modint c = 1;
+    for(long long i=n; i>n-k; --i) c *= modint(i);
+    return c;
+  }
 };
 
-struct mod_combination {
+struct ModBinomial {
   /* initialize: O(n) */
   /* choose    : O(1) */
   vector<modint> fact, fact_inv, inv;
-  mod_combination(int n) : fact(n+1, 1), fact_inv(n+1, 1), inv(n+1, 1) {
+  ModBinomial(int n) : fact(n+1, 1), fact_inv(n+1, 1), inv(n+1, 1) {
+    assert(n < modint::MOD);
     for (int i = 2; i <= n; i++) {
       fact[i] = fact[i - 1] * i;
-      inv[i] = -inv[MOD % i] * (MOD / i);
+      inv[i] = -inv[modint::MOD % i] * (modint::MOD / i);
       fact_inv[i] = fact_inv[i - 1] * inv[i];
     }
   }
   modint choose(int n, int k) { assert(n>=0 && k>=0); return n < k ? 0 : fact[n] * fact_inv[k] * fact_inv[n - k]; }
   modint permutation(int n, int k) { assert(n>=0 && k>=0); return n < k ? 0 : fact[n] * fact_inv[n - k]; }
 };
-
-modint choose(long long n, int k) {
-  /* O(k log MOD) */
-  assert(n>=0 && k>=0);
-  modint c = 1;
-  for(int i=1; i<=k; i++) c *= modint(n-i+1) / i;
-  return c;
-}
-
-modint permutation(long long n, int k) {
-  /* O(k) */
-  assert(n>=0 && k>=0);
-  modint c = 1;
-  for(long long i=n; i>n-k; --i) c *= modint(i);
-  return c;
-}
