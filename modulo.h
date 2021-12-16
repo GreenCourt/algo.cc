@@ -28,7 +28,7 @@ int modinv(long long a, int mod) {
 
 int choose(long long n, int k, int mod) {
   /* O(k log mod) */
-  assert(n>=0 && k>=0);
+  assert(n>=0 && k>=0 && n < mod && k < mod);
   long long c = 1;
   for(int i=1; i<=k; i++) c = (n-i+1) % mod * c % mod * modinv(i, mod) % mod; 
   return (int)c;
