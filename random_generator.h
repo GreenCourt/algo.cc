@@ -75,6 +75,7 @@ pair<T,T> random_range(T mn, T mx, bool allow_same) { // [mn, mx]
 
 vector<pair<int,int>> random_graph(int n, int m) {
   /* O(n^2) */
+  assert(m <= n*(n-1)/2);
   vector<pair<int,int>> edges; // 0-indexed edge list
   edges.reserve(m);
   int r = (n*(n-1) / 2) - 1;
@@ -87,7 +88,7 @@ vector<pair<int,int>> random_graph(int n, int m) {
 vector<pair<int,int>> random_path_graph(int n) {
   /* O(n) */
   vector<pair<int,int>> edges(n-1); // 0-indexed edge list
-  vector p = random_permutation(0, n-1);
+  vector<int> p = random_permutation(0, n-1);
   for(int i=0; i<n-1; ++i) edges[i] = {p[i], p[i+1]};
   return edges;
 }
