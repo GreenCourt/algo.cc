@@ -61,7 +61,7 @@ struct V { V() {}; };
 struct E { E() {}; };
 struct S { S() {}; };
 S e() { return ; }
-S opS(S a, S b) { return ; }
-S opV(S s, V info) { return s; }
-S opE(S s, E info) { return s; }
+S opS(S a, S b) { /* merge child nodes */ return ; }
+S opV(S s, V info) { /* apply V when send value to the parent */ return s; }
+S opE(S s, E info) { /* apply E when recieving value from a child */ return s; }
 #endif
