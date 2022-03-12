@@ -128,6 +128,28 @@ vector<pair<int,int>> random_tree(int n) {
   return edges;
 }
 
+vector<pair<int,int>> random_connected_graph(int n, int m) {
+  /* O(n^2) */
+  assert(m <= n*(n-1)/2);
+  assert(m >= n-1);
+  vector<pair<int,int>> edges = random_tree(n); // 0-indexed edge list
+  edges.reserve(m);
+
+  vector<vector<bool>> check(n, vector<bool>(n, false));
+  for(int i=0; i<n-1; ++i) {
+    int u = edges[i].first, v = edges[i].second;
+    check[u][v] = check[v][u] = true;
+  }
+
+  int required = m - edges.size();
+  int candidates = (n*(n-1) / 2)  - edges.size();
+  int r = candidates - 1;
+  for(int a=0; a<n; ++a) for(int b=a+1; b<n; ++b) if(!check[a][b]) 
+    if(randint(0, r--) < required) edges.emplace_back(a,b), required--;
+  assert(edges.size() == m);
+  return edges;
+}
+
 const string string_digits = "0123456789";
 const string string_alphabet_lowercase = "abcdefghijklmnopqrstuvwxyz";
 const string string_alphabet_uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
