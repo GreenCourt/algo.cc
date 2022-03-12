@@ -2,6 +2,7 @@ const long long INF = numeric_limits<long long>::max()/2;
 vector<vector<long long>> warshall_floyd(vector<vector<long long>> const &adjmatrix) {
   /* O(|V|^3) */
   int n = adjmatrix.size();
+  for(int i=0; i<n; ++i) assert(adjmatrix[i][i]==0);
   vector<vector<long long>> dist(adjmatrix);
   for(int k = 0; k < n; ++k)
     for(int i = 0; i < n; ++i)
