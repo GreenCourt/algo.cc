@@ -23,7 +23,7 @@ struct modint {
   bool operator!=(const modint &p) const { return val != p.val; }
   friend ostream &operator<<(ostream &os, const modint &p) { return os << p.val; }
   friend istream &operator>>(istream &is, modint &a) { long long t; is >> t; a = modint(t); return (is); }
-  static modint choose(long long n, int k) {
+  static modint choose(int n, int k) {
     /* O(k log MOD) */
     assert(n>=0 && k>=0 && n < MOD && k < MOD);
     modint c = 1;
@@ -40,10 +40,9 @@ struct modint {
 };
 
 struct ModBinomial {
-  /* initialize: O(n) */
-  /* choose    : O(1) */
   vector<modint> fact, fact_inv, inv;
   ModBinomial(int n) : fact(n+1, 1), fact_inv(n+1, 1), inv(n+1, 1) {
+    /* O(n) */
     assert(n < modint::MOD);
     for (int i = 2; i <= n; i++) {
       fact[i] = fact[i - 1] * i;
@@ -51,6 +50,16 @@ struct ModBinomial {
       fact_inv[i] = fact_inv[i - 1] * inv[i];
     }
   }
-  modint choose(int n, int k) { assert(n>=0 && k>=0); return n < k ? 0 : fact[n] * fact_inv[k] * fact_inv[n - k]; }
-  modint permutation(int n, int k) { assert(n>=0 && k>=0); return n < k ? 0 : fact[n] * fact_inv[n - k]; }
+#if 1
+  modint choose(int n, int k) { /* O(1) */ assert(n>=0 && k>=0); return n < k ? 0 : fact[n] * fact_inv[k] * fact_inv[n - k]; }
+#else
+  modint choose(int n, int k) {
+    /* O(k) */
+    assert(n>=0 && k>=0 && n < modint::MOD && k < modint::MOD);
+    modint c = 1;
+    for(int i=1; i<=k; i++) c *= modint(n-i+1);
+    return c * fact_inv[k];
+  }
+#endif
+  modint permutation(int n, int k) { /* O(1) */ assert(n>=0 && k>=0); return n < k ? 0 : fact[n] * fact_inv[n - k]; }
 };
