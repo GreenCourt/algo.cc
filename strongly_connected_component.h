@@ -1,6 +1,7 @@
 struct StronglyConnectedComponent {
-  vector<vector<int>> groups; // topologically sorted groups ( groups[0] --> groups[1] --> groups[2] ... )
   vector<int> group_number;   // for each vertex
+  vector<vector<int>> groups; // topologically sorted groups
+                              // ( groups[0] --> groups[1] --> groups[2] ... )
   /* ------------------------ */
   const int n;
   const vector<vector<int>>& adj;
