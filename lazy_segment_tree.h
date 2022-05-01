@@ -40,7 +40,7 @@ struct lazy_segment_tree {
     /* O(log n) */
     assert(l >=0 && l <= n);
     assert(r >=0 && r <= n);
-    assert(l <= r);
+    assert(l <= r); // return e() if l==r
     vr = (vr==-1) ? leafs : vr;
     lazy_update(v);
     if(l<=vl && vr<=r) return node[v];
@@ -54,7 +54,7 @@ struct lazy_segment_tree {
     /* O(log n) */
     assert(l >=0 && l <= n);
     assert(r >=0 && r <= n);
-    assert(l <= r);
+    assert(l <= r); // nop if l==r
     vr = (vr==-1) ? leafs : vr;
     lazy_update(v);
     if(l >= vr || r <= vl) return;
