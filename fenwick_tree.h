@@ -10,6 +10,7 @@ struct fenwick_tree {
     }
   }
   long long sum(int r) { /* [0, r) */
+    assert(r>=0);
     long long s = 0;
     while(r) {
       s += node[r-1];
