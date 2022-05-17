@@ -7,38 +7,39 @@ template <class S, S (*op)(S, S), S (*e)()> struct segment_tree {
     /* O(n) */
     int msb = 1; while((msb<<1) <= n) msb <<= 1;
     leafs = (n==msb) ? n : msb << 1;
-    node = vector<S>(2 * leafs - 1, e());
-    for(int i=0; i<n; i++) node[i+leafs-1] = initial[i];
-    for(int i=leafs-2; i>=0; --i) node[i] = op(node[l_child(i)], node[r_child(i)]);
+    node = vector<S>(2 * leafs, e());
+    for(int i=0; i<n; i++) node[i+leafs] = initial[i];
+    for(int i=leafs-1; i>0; --i) node[i] = op(node[l_child(i)], node[r_child(i)]);
   }
 
-  static inline int r_child(int v) { return v*2+2; }
-  static inline int l_child(int v) { return v*2+1; }
-  static inline int parent(int v) { return (v+1)/2-1; }
+  static inline int r_child(int v) { return v*2+1; }
+  static inline int l_child(int v) { return v*2; }
+  static inline int parent(int v) { return v/2; }
 
-  S product(int l, int r, int v=0, int vl=0, int vr=-1) { /* [l, r) */
+  S product(int l, int r) { /* [l, r) */
     /* O(log n) */
-    assert(l >=0 && l <= n);
-    assert(r >=0 && r <= n);
-    assert(l <= r); // return e() if l==r
-    vr = (vr==-1) ? leafs : vr;
-    if(l <= vl && vr <= r) return node[v];
-    S ret = e(); int mid=(vl+vr)/2;
-    if(l < mid) ret = op(product(l, r, l_child(v), vl, mid),ret);
-    if(r > mid) ret = op(ret,product(l, r, r_child(v), mid, vr));
-    return ret;
+    assert(0 <= l && l <= r && r <= n); // return e() if l==r
+    S pl = e(), pr = e();
+    l += leafs, r += leafs;
+    while (l < r) {
+      if(l & 1 /* if l is right child */) pl = op(pl, node[l++]);
+      if(r & 1 /* if r is right child */) pr = op(node[--r], pr);
+      l = parent(l), r = parent(r);
+    }
+    return op(pl, pr);
   }
 
   void set(int index, S s) {
     /* O(log n) */
     assert(0 <= index && index < n);
-    int v = index + (leafs-1);
+    int v = index + leafs;
     node[v] = s;
-    while((v=parent(v)) != -1) node[v] = op(node[l_child(v)], node[r_child(v)]);
+    while(v=parent(v)) node[v] = op(node[l_child(v)], node[r_child(v)]);
   }
+
   S get(int index) {
     assert(0 <= index && index < n);
-    return node[index + (leafs-1)];
+    return node[index + leafs];
   }
 
   int max_right(int l, function<bool(S)> f) const {
@@ -49,23 +50,23 @@ template <class S, S (*op)(S, S), S (*e)()> struct segment_tree {
     assert(0 <= l && l <= n);
     assert(f(e()));
     if (l == n) return n;
-    int v = l + (leafs-1);
+    int v = l + leafs;
     S sm = e();
     do {
-      while (v % 2 == 1) v = parent(v);
+      while (v % 2 == 0) v = parent(v);
       if (!f(op(sm, node[v]))) {
-        while (v < leafs-1) {
+        while (v < leafs) {
           v = l_child(v);
           if (f(op(sm, node[v]))) {
             sm = op(sm, node[v]);
             v++;
           }
         }
-        return v - (leafs-1);
+        return v - leafs;
       }
       sm = op(sm, node[v]);
       v++;
-    } while (((v+1) & -(v+1)) != (v+1));
+    } while ((v & -v) != v);
     return n;
   }
 
@@ -77,23 +78,23 @@ template <class S, S (*op)(S, S), S (*e)()> struct segment_tree {
     assert(0 <= r && r <= n);
     assert(f(e()));
     if (r == 0) return 0;
-    int v = r + (leafs-1);
+    int v = r + leafs;
     S sm = e();
     do {
       v--;
-      while (v > 0 && (v % 2 == 0)) v = parent(v);
+      while (v > 1 && (v % 2)) v = parent(v);
       if (!f(op(node[v], sm))) {
-        while (v < leafs-1) {
+        while (v < leafs) {
           v = r_child(v);
           if (f(op(node[v], sm))) {
             sm = op(node[v], sm);
             v--;
           }
         }
-        return v + 1 - (leafs-1);
+        return v + 1 - leafs;
       }
       sm = op(node[v], sm);
-    } while (((v+1) & -(v+1)) != (v+1));
+    } while ((v & -v) != v);
     return 0;
   }
 };
