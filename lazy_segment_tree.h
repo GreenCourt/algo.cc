@@ -6,93 +6,88 @@ template <class S,
           F (*composition)(F, F),
           F (*id)()>
 struct lazy_segment_tree {
-  int n, leafs;
-  vector<S> node;
-  vector<F> lazy;
-
   lazy_segment_tree(int n=0) : lazy_segment_tree(vector<S>(n, e())) {}
   lazy_segment_tree(const vector<S>& initial) : n(int(initial.size())) {
     /* O(n) */
-    int msb = 1; while((msb<<1) <= n) msb <<= 1;
+    int msb = 1;
+    height = 0;
+    while((msb<<1) <= n) msb <<= 1, height++;
     leafs = (n==msb) ? n : msb << 1;
-    node = vector<S>(2 * leafs - 1, e());
-    lazy = vector<F>(2 * leafs - 1, id());
-    for(int i=0; i<n; i++) node[i+leafs-1] = initial[i];
-    for(int i=leafs-2; i>=0; --i) node[i] = op(node[l_child(i)], node[r_child(i)]);
+    node = vector<S>(2 * leafs, e());
+    lazy = vector<F>(leafs, id());
+    for(int i=0; i<n; i++) node[i+leafs] = initial[i];
+    for(int i=leafs-1; i>0; --i) update_from_children(i);
   }
-
-  inline int r_child(int v) { return v*2+2; }
-  inline int l_child(int v) { return v*2+1; }
-  inline int parent(int v) { return (v+1)/2-1; }
-  inline bool is_leaf(int v) { return v >= (leafs-1); }
-
-  void lazy_update(int v) { 
-    /* O(1) */
-    node[v] = mapping(lazy[v], node[v]);
-    if ( !is_leaf(v) ) {
-      lazy[l_child(v)] = composition(lazy[v], lazy[l_child(v)]);
-      lazy[r_child(v)] = composition(lazy[v], lazy[r_child(v)]);
-    }
-    lazy[v] = id();
-  }
-
-  S product(int l, int r, int v=0, int vl=0, int vr=-1) { /* [l, r) */
+  S product(int l, int r) { /* [l, r) */
     /* O(log n) */
-    assert(l >=0 && l <= n);
-    assert(r >=0 && r <= n);
-    assert(l <= r); // return e() if l==r
-    vr = (vr==-1) ? leafs : vr;
-    lazy_update(v);
-    if(l<=vl && vr<=r) return node[v];
-    S ret = e(); int mid=(vl+vr)/2;
-    if(l < mid) ret = op(product(l, r, l_child(v), vl, mid),ret);
-    if(r > mid) ret = op(ret,product(l, r, r_child(v), mid, vr));
-    return ret;
+    assert(0 <= l && l <= r && r <= n);
+    if(l == r) return e();
+    S pl = e(), pr = e();
+    l += leafs, r += leafs;
+    for(int i=height; i>0; i--) {
+      if(((l>>i) << i) != l) push2children(l>>i);
+      if(((r>>i) << i) != r) push2children(r>>i);
+    }
+    while(l<r) {
+      if(l & 1) pl = op(pl, node[l++]);
+      if(r & 1) pr = op(node[--r], pr);
+      l = parent(l), r = parent(r);
+    }
+    return op(pl, pr);
   }
-
   void apply(int l, int r, F f, int v=0, int vl=0, int vr=-1) { /* [l, r) */
     /* O(log n) */
-    assert(l >=0 && l <= n);
-    assert(r >=0 && r <= n);
-    assert(l <= r); // nop if l==r
-    vr = (vr==-1) ? leafs : vr;
-    lazy_update(v);
-    if(l >= vr || r <= vl) return;
-    if(l<=vl && vr<=r) {
-      lazy[v] = composition(f, lazy[v]);
-      lazy_update(v);
+    assert(0 <= l && l <= r && r <= n); // nop if l==r
+    if(l==r) return;
+    l += leafs, r += leafs;
+    for(int i=height; i>0; i--) {
+      if(((l>>i) << i) != l) push2children(l>>i);
+      if(((r>>i) << i) != r) push2children((r-1)>>i);
     }
-    else {
-      int mid=(vl+vr)/2;
-      apply(l, r, f, l_child(v), vl, mid);
-      apply(l, r, f, r_child(v), mid, vr);
-      node[v] = op(node[l_child(v)], node[r_child(v)]);
+    for(int L=l, R=r; L<R; L=parent(L), R=parent(R)) {
+      if (L & 1) push(L++, f);
+      if (R & 1) push(--R, f);
+    }
+    for(int i=1; i<=height; i++) {
+      if(((l>>i) << i) != l) update_from_children(l>>i);
+      if(((r>>i) << i) != r) update_from_children((r-1)>>i);
     }
   }
-
-  void lazy_update_all_ancestors(int v) {
-    /* O(log n) */
-    vector<int> path_to_root;
-    for(int u = parent(v); u != -1; u=parent(u)) path_to_root.push_back(u);
-    for(auto itr = rbegin(path_to_root); itr != rend(path_to_root); ++itr) lazy_update(*itr);
-  }
-
   void set(int index, S s) {
     /* O(log n) */
     assert(0 <= index && index < n);
-    int v = index + (leafs-1);
-    lazy_update_all_ancestors(v);
+    int v = index + leafs;
+    for(int i=height; i>0; i--) push2children(v>>i); // push from root to v
     node[v] = s;
-    while((v=parent(v)) != -1) node[v] = op(node[l_child(v)], node[r_child(v)]);
+    while((v=parent(v))!=-1) node[v] = op(node[l_child(v)], node[r_child(v)]);
   }
-
   S get(int index) {
     /* O(log n) */
     assert(0 <= index && index < n);
-    int v = index + (leafs-1);
-    lazy_update_all_ancestors(v);
-    lazy_update(v);
+    int v = index + leafs;
+    for(int i=height; i>0; i--) push2children(v>>i); // push from root to v
     return node[v];
+  }
+  private:
+  int n, leafs, height;
+  vector<S> node;
+  vector<F> lazy;
+  inline int r_child(int v) { return v*2+1; }
+  inline int l_child(int v) { return v*2; }
+  inline int parent(int v) { return v/2; }
+  inline bool is_leaf(int v) { return v >= leafs; }
+  inline void push(int v, F f) {
+    node[v] = mapping(f, node[v]);
+    if(!is_leaf(v)) lazy[v] = composition(f, lazy[v]);
+  }
+  inline void push2children(int v) { 
+    if(is_leaf(v)) return;
+    push(l_child(v), lazy[v]);
+    push(r_child(v), lazy[v]);
+    lazy[v] = id();
+  }
+  inline void update_from_children(int v) { 
+    node[v] = op(node[l_child(v)], node[r_child(v)]);
   }
 };
 
