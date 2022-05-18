@@ -1,7 +1,4 @@
 template <class S, S (*op)(S, S), S (*e)()> struct segment_tree {
-  int n, leafs;
-  vector<S> node;
-
   segment_tree(int n=0) : segment_tree(vector<S>(n, e())) {}
   segment_tree(const vector<S>& initial) : n(int(initial.size())) {
     /* O(n) */
@@ -12,18 +9,14 @@ template <class S, S (*op)(S, S), S (*e)()> struct segment_tree {
     for(int i=leafs-1; i>0; --i) node[i] = op(node[l_child(i)], node[r_child(i)]);
   }
 
-  static inline int r_child(int v) { return v*2+1; }
-  static inline int l_child(int v) { return v*2; }
-  static inline int parent(int v) { return v/2; }
-
   S product(int l, int r) { /* [l, r) */
     /* O(log n) */
     assert(0 <= l && l <= r && r <= n); // return e() if l==r
     S pl = e(), pr = e();
     l += leafs, r += leafs;
-    while (l < r) {
-      if(l & 1 /* if l is right child */) pl = op(pl, node[l++]);
-      if(r & 1 /* if r is right child */) pr = op(node[--r], pr);
+    while(l < r) {
+      if(l & 1) pl = op(pl, node[l++]);
+      if(r & 1) pr = op(node[--r], pr);
       l = parent(l), r = parent(r);
     }
     return op(pl, pr);
@@ -97,6 +90,12 @@ template <class S, S (*op)(S, S), S (*e)()> struct segment_tree {
     } while ((v & -v) != v);
     return 0;
   }
+  private:
+  int n, leafs;
+  vector<S> node;
+  static inline int r_child(int v) { return v*2+1; }
+  static inline int l_child(int v) { return v*2; }
+  static inline int parent(int v) { return v/2; }
 };
 
 #if 0 /* Range Min */
