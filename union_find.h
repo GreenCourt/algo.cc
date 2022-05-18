@@ -13,7 +13,7 @@ struct UnionFind {
   bool same(int x, int y) { return root(x) == root(y); }
   int root(int x) { return data[x] < 0 ? x : data[x] = root(data[x]); }
   int size(int x) { return -data[root(x)]; }
-  vector<vector<int>> groups() {
+  vector<vector<int>> groups() { /* O(n) */
     int n = data.size();
     vector<int> r(n), group_size(n);
     for (int i = 0; i < n; i++) { r[i] = root(i); group_size[r[i]]++; }
