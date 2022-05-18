@@ -59,7 +59,7 @@ struct lazy_segment_tree {
     int v = index + leafs;
     for(int i=height; i>0; i--) push2children(v>>i); // push from root to v
     node[v] = s;
-    while((v=parent(v))!=-1) node[v] = op(node[l_child(v)], node[r_child(v)]);
+    while(v=parent(v)) node[v] = op(node[l_child(v)], node[r_child(v)]);
   }
   S get(int index) {
     /* O(log n) */
@@ -67,6 +67,65 @@ struct lazy_segment_tree {
     int v = index + leafs;
     for(int i=height; i>0; i--) push2children(v>>i); // push from root to v
     return node[v];
+  }
+  int max_right(int l, function<bool(S)> f) {
+    /* O(log n) */
+    // returns r such that
+    //         f(op(a[l], a[l + 1], ..., a[r - 1])) == true
+    //         f(op(a[l], a[l + 1], ..., a[r])) == false
+    assert(0 <= l && l <= n);
+    assert(f(e()));
+    if(l==n) return n;
+    int v = l + leafs;
+    for(int i=height; i>0; i--) push2children(v>>i);
+    S sm = e();
+    do {
+      while(v % 2 == 0) v = parent(v);
+      if(!f(op(sm, node[v]))) {
+        while (v < leafs) {
+          push2children(v);
+          v = l_child(v);
+          if (f(op(sm, node[v]))) {
+            sm = op(sm, node[v]);
+            v++;
+          }
+        }
+        return v - leafs;
+      }
+      sm = op(sm, node[v]);
+      v++;
+    } while ((v & -v) != v);
+    return n;
+  }
+
+  int min_left(int r, function<bool(S)> f) {
+    /* O(log n) */
+    // returns l such that
+    //         f(op(a[l], a[l + 1], ..., a[r - 1])) == true
+    //         f(op(a[l - 1], a[l], ..., a[r - 1])) == false
+    assert(0 <= r && r <= n);
+    assert(f(e()));
+    if(r==0) return 0;
+    int v = r + leafs;
+    for(int i=height; i>0; i--) push2children((v-1)>>i);
+    S sm = e();
+    do {
+      v--;
+      while (v > 1 && (v % 2)) v = parent(v);
+      if (!f(op(node[v], sm))) {
+        while (v < leafs) {
+          push2children(v);
+          v = r_child(v);
+          if (f(op(node[v], sm))) {
+            sm = op(node[v], sm);
+            v--;
+          }
+        }
+        return v + 1 - leafs;
+      }
+      sm = op(node[v], sm);
+    } while ((v & -v) != v);
+    return 0;
   }
   private:
   int n, leafs, height;
