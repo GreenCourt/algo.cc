@@ -25,6 +25,7 @@ struct Dinic {
     return flow;
   }
 
+  private:
   bool bfs(int s, int t) {
     /* O(|E|) */
     level.assign(n, -1);
