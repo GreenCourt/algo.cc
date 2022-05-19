@@ -24,6 +24,7 @@ struct RerootingDP {
     reroot(0);
   }
 
+  private:
   S dfs(int v, int p=-1) {
     int deg = adj[v].size();
     dp[v] = vector<S>(deg, e());

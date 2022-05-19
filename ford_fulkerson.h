@@ -30,6 +30,7 @@ struct FordFulkerson {
     return 0; // dummy
   }
 
+  private:
   long long dfs(int v, vector<bool> &visited, int t, long long flow=INF) {
     /* O(|E|) */
     if(v==t) return flow;

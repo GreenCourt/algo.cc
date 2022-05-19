@@ -35,14 +35,6 @@ struct LowestCommonAncestor {
     dfs(root, 0, adj);
     st = SparseTable(eular_tour);
   }
-  void dfs(int v, int d, const vector<vector<edge>>& adj) {
-    first_appear[v] = eular_tour.size(), depth[v] = d;
-    eular_tour.emplace_back(d, v);
-    for(int u : adj[v]) if(first_appear[u] == -1) {
-      parent[u] = v;
-      dfs(u, d+1, adj); eular_tour.emplace_back(d, v);
-    }
-  }
   int lca(int u, int v) { /* O(1) */
     int l = min(first_appear[u], first_appear[v]);
     int r = max(first_appear[u], first_appear[v])+1;
@@ -61,5 +53,14 @@ struct LowestCommonAncestor {
     while(u!=x) p2.push_back(u = parent[u]);
     for(auto it = next(p2.rbegin()); it!=p2.rend(); it++) p1.push_back(*it);
     return p1;
+  }
+  private:
+  void dfs(int v, int d, const vector<vector<edge>>& adj) {
+    first_appear[v] = eular_tour.size(), depth[v] = d;
+    eular_tour.emplace_back(d, v);
+    for(int u : adj[v]) if(first_appear[u] == -1) {
+      parent[u] = v;
+      dfs(u, d+1, adj); eular_tour.emplace_back(d, v);
+    }
   }
 };
