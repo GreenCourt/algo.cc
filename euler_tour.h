@@ -10,8 +10,8 @@ struct EulerTour {
   private:
   const vector<vector<int>> &adj;
   void touch (int v) {
-    if(first_visit[v] == -1) first_visit[v] = tour.size();;
-    last_visit[v] = tour.size();;
+    if(first_visit[v] == -1) first_visit[v] = tour.size();
+    last_visit[v] = tour.size();
     tour.push_back(v);
   };
   void dfs(int v, int p=-1) {
