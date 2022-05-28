@@ -35,7 +35,7 @@ struct lazy_segment_tree {
     }
     return op(pl, pr);
   }
-  void apply(int l, int r, F f, int v=0, int vl=0, int vr=-1) { /* [l, r) */
+  void apply(int l, int r, F f) { /* [l, r) */
     /* O(log n) */
     assert(0 <= l && l <= r && r <= n); // nop if l==r
     if(l==r) return;
