@@ -198,6 +198,9 @@ F id(){ return ID; }
 #endif
 
 #if 0 /* Range Sum, Range Update */
+/*
+ *  size must be initialized by 1 like vector<S>(n, {0,1})
+ */
 struct S{ long long value; int size; };
 using F = long long;
 const F ID = 1e18;
@@ -209,6 +212,9 @@ F id(){ return ID; }
 #endif
 
 #if 0 /* Range Sum, Range Add */
+/*
+ *  size must be initialized by 1 like vector<S>(n, {0,1})
+ */
 struct S{ long long value; int size; };
 using F = long long;
 S op(S l, S r){ return {l.value+r.value, l.size+r.size}; }
