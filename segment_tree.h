@@ -109,3 +109,9 @@ using S = int;
 S op(S a, S b) { return a + b; }
 S e() { return 0; }
 #endif
+
+#if 0 /* Range gcd */
+using S = int;
+S op(S a, S b) { return gcd(a, b); }
+S e() { return 0; }
+#endif
