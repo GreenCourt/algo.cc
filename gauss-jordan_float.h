@@ -14,8 +14,10 @@ int gauss_jordan(Matrix& A, bool is_extended = false) {
     }
     if (pivot == -1) continue;
     swap(A[pivot], A[rank]);
-    auto fac = A[rank][col];
-    for (int col2 = 0; col2 < n; ++col2) A[rank][col2] /= fac;
+    {
+      auto fac = A[rank][col];
+      for (int col2 = 0; col2 < n; ++col2) A[rank][col2] /= fac;
+    }
     for (int row = 0; row < m; ++row) if (row != rank && abs(A[row][col]) > EPS) {
       auto fac = A[row][col];
       for (int col2 = 0; col2 < n; ++col2) A[row][col2] -= A[rank][col2] * fac;
