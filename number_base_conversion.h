@@ -4,7 +4,7 @@ string from_decimal(long long x, int base, bool upper_case=false) {
   if(x == 0) return "0";
   string r;
   while(x) {
-    char u = x%base;
+    char u = char(x%base);
     r.push_back((u<10) ? (u+'0') : upper_case ? (u-10+'A') : (u-10+'a'));
     x /= base;
   }
