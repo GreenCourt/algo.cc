@@ -1,8 +1,9 @@
 struct EulerTour {
   vector<int> tour, first_visit, last_visit;
-  EulerTour(const vector<vector<int>> &adj, int root) : adj(adj),
+  EulerTour(const vector<vector<int>> &adj, int root) :
     first_visit(vector<int>(adj.size(), -1)),
-    last_visit(vector<int>(adj.size(), -1))
+    last_visit(vector<int>(adj.size(), -1)),
+    adj(adj)
   {
     /* O(|V| + |E|) */
     dfs(root);

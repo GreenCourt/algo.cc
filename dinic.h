@@ -21,7 +21,7 @@ struct Dinic {
   long long maxflow(int s, int t) {
     /* O(|V|^2 |E|) */
     long long flow = 0, f;
-    while(bfs(s,t)) while (f=dfs(s,t)) flow += f;
+    while(bfs(s,t)) while ((f=dfs(s,t))) flow += f;
     return flow;
   }
 

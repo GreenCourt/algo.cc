@@ -27,7 +27,7 @@ template <class S, S (*op)(S, S), S (*e)()> struct segment_tree {
     assert(0 <= index && index < n);
     int v = index + leafs;
     node[v] = s;
-    while(v=parent(v)) node[v] = op(node[l_child(v)], node[r_child(v)]);
+    while((v=parent(v))) node[v] = op(node[l_child(v)], node[r_child(v)]);
   }
 
   S get(int index) {

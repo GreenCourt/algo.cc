@@ -1,5 +1,5 @@
 using Float = double;
-const Float EPS=1e-9, PI = acos(-1.0L);
+const Float EPS=1e-9, PI = acos(-1.0);
 inline int sgn(const Float a) {return (a < -EPS ? -1 : (a > EPS ? +1 : 0));}
 
 using Point = complex<Float>;
@@ -87,7 +87,7 @@ Float degree2radian(const Float &degree) {return degree * PI / 180.0;}
 Point projection(const Line &l, const Point &p){return l[0]+(dot(p-l[0], l[1]-l[0])/norm(l[1]-l[0]))*(l[1]-l[0]);}
 Point projection(const Segment &l, const Point &p){return l[0]+(dot(p-l[0], l[1]-l[0])/norm(l[1]-l[0]))*(l[1]-l[0]);}
 Point reflection(const Line &l, const Point &p){return p+(projection(l,p)-p)*2.0;}
-bool same(const Line &a, const Line &b){return (sgn(cross(a[1]-a[0], b[1]-b[0]))==0)&&(sgn(cross(a[1]-a[0], b[0]-a[0])==0));}
+bool same(const Line &a, const Line &b){return (sgn(cross(a[1]-a[0], b[1]-b[0]))==0)&&(sgn(cross(a[1]-a[0], b[0]-a[0]))==0);}
 
 bool intersect(const Line &l, const Point &p) { return abs(ccw(l[0], l[1], p)) != 1; }
 bool intersect(const Line &a, const Line &b) { return sgn(cross(a[1]-a[0], b[1]-b[0]))!=0 || sgn(cross(a[1]-a[0], b[1]-a[0]))==0; }
@@ -177,7 +177,7 @@ vector<Point> cross_point(const Circle& c1, const Circle& c2) {
   Float rs = sqrt(c1.r*c1.r-rc*rc);
   Vector e = (c2.center-c1.center) / d;
   if(isnan(rs)) return vector<Point>();
-  if(sgn(rs==0)) return {c1.center + e * Vector(rc,rs)};
+  if(sgn(rs)==0) return {c1.center + e * Vector(rc,rs)};
   return {c1.center + e * Vector(rc,rs), c1.center + e * Vector(rc,-rs)};
 }
 

@@ -1,11 +1,10 @@
 template<typename T>
 struct Compress1D {
   vector<T> origin; // origin[compressed[i]] = input[i]
-  vector<T> compressed;
+  vector<int> compressed;
   Compress1D() {}
-  Compress1D(vector<T> const &input) {
+  Compress1D(vector<T> const &input) : origin(input) {
     /* O(n log n) */
-    vector<T> origin(input);
     sort(origin.begin(), origin.end());
     origin.erase(unique(origin.begin(), origin.end()), origin.end());
     int n = input.size();

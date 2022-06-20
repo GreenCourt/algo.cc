@@ -59,7 +59,7 @@ struct lazy_segment_tree {
     int v = index + leafs;
     for(int i=height; i>0; i--) push2children(v>>i); // push from root to v
     node[v] = s;
-    while(v=parent(v)) node[v] = op(node[l_child(v)], node[r_child(v)]);
+    while((v=parent(v))) node[v] = op(node[l_child(v)], node[r_child(v)]);
   }
   S get(int index) {
     /* O(log n) */
