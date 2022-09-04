@@ -1,37 +1,39 @@
 struct edge {int u, weight;};
-tuple<long long,int,int> tree_diameter(const vector<vector<edge>>& adj) {
-  /* O(|V|+|E|) */
-  // return diameter and two vertices s and t where dist(s,t) = diameter.
-  int n = adj.size();
-  int s, t; long long diameter;
-  {
-    vector<long long> dist(n, -1); dist[0] = 0;
-    stack<int> st; st.push(0);
+struct tree_diameter {
+  long long diameter;
+  int a,b; // vertices where dist(a,b) = diameter
+  vector<long long> dist_from_a;
+
+  tree_diameter(const vector<vector<edge>>& adj) {
+    /* O(|V|+|E|) */
+    int n = adj.size();
+    {
+      vector<long long> dist_from_0(n, -1); dist_from_0[0] = 0;
+      stack<int> st; st.push(0);
+      pair<long long,int> x = {-1, -1};
+      while(st.size()) {
+        int v = st.top(); st.pop();
+        x = max(x, {dist_from_0[v] ,v});
+        for(auto [u,w]:adj[v]) if(dist_from_0[u] == -1) {
+          dist_from_0[u] = dist_from_0[v] + w;
+          st.push(u);
+        }
+      }
+      a = x.second;
+    }
+
+    vector<long long> dist_from_a(n, -1); dist_from_a[a] = 0;
+    stack<int> st; st.push(a);
     pair<long long,int> x = {-1, -1};
     while(st.size()) {
       int v = st.top(); st.pop();
-      x = max(x, {dist[v] ,v});
-      for(auto [u,w]:adj[v]) if(dist[u] == -1) {
-        dist[u] = dist[v] + w;
+      x = max(x, {dist_from_a[v] ,v});
+      for(auto [u,w]:adj[v]) if(dist_from_a[u] == -1) {
+        dist_from_a[u] = dist_from_a[v] + w;
         st.push(u);
       }
     }
-    s = x.second;
-  }
-  {
-    vector<long long> dist(n, -1); dist[s] = 0;
-    stack<int> st; st.push(s);
-    pair<long long,int> x = {-1, -1};
-    while(st.size()) {
-      int v = st.top(); st.pop();
-      x = max(x, {dist[v] ,v});
-      for(auto [u,w]:adj[v]) if(dist[u] == -1) {
-        dist[u] = dist[v] + w;
-        st.push(u);
-      }
-    }
-    t = x.second;
+    b = x.second;
     diameter = x.first;
   }
-  return {diameter, s, t};
-}
+};
