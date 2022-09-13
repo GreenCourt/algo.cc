@@ -74,8 +74,8 @@ bool is_orthogobal(const Line &a, const Segment &b) {return sgn(dot(a[1] - a[0],
 
 int ccw(const Point &s, Point t, Point x) {
   t = t - s, x = x - s;
-  if(sgn(cross(t, x)) > 0) return +1;    // COUNTER_CLOCKWISE : x is right-side of s-t
-  if(sgn(cross(t, x)) < 0) return -1;    // CLOCKWISE         : x is left-side of s-t
+  if(sgn(cross(t, x)) > 0) return +1;    // COUNTER_CLOCKWISE : x is left-side of s-t
+  if(sgn(cross(t, x)) < 0) return -1;    // CLOCKWISE         : x is right-side of s-t
   if(sgn(dot(t, x) < 0)) return +2;      // ONLINE_BACK       : line up x-s-t
   if(sgn(norm(t)-norm(x))<0) return -2;  // ONLINE_FRONT      : line up s-t-x
   return 0;                              // ON_SEGMENT        : line up s-x-t
