@@ -1,8 +1,18 @@
 struct StronglyConnectedComponent {
   vector<int> group_number;   // for each vertex
-  vector<vector<int>> groups; // topologically sorted groups
-                              // ( groups[0] --> groups[1] --> groups[2] ... )
-
+  vector<vector<int>> groups; // Each group is a strongly connected component.
+                              // Weakly connected groups are topologically sorted.
+                              // Ordering between disconnected groups is not guaranteed.
+                              // e.g.
+                              //
+                              //    -----------------------
+                              //    |                     |
+                              //    |                     v
+                              // groups[0]  groups[1]  groups[2] --> group[3]  group[4]
+                              //               |                                  ^
+                              //               |                                  |
+                              //               ------------------------------------
+                              //
   StronglyConnectedComponent(const vector<vector<int>>& adj) : n(adj.size()), adj(adj) {
     /* O(|V|+|E|) */
     post_order.reserve(n); visited.assign(n,false);
