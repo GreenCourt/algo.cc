@@ -1,4 +1,5 @@
-long long BinarySearch(long long l, long long r, function<bool(long long)> f) {
+template<class Fn>
+long long BinarySearch(long long l, long long r, Fn f) {
   /* O(log(r-l) * O(f)) */
   /* [l,r] both inclusive */
   /* Find the boundary T and F that satisfies (f(T)==true && f(F)==false && abs(T-F)==1). */

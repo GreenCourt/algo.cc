@@ -1,4 +1,5 @@
-double BinarySearch(double l, double r, int iteration, function<bool(double)> f) {
+template<class Fn>
+double BinarySearch(double l, double r, int iteration, Fn f) {
   /* O(iteration * O(f)) */
   /* [l,r] both inclusive */
   /* Find the boundary T and F that satisfies (f(T)==true && f(F)==false) for (iteration) times. */
