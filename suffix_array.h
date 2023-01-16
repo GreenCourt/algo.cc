@@ -130,25 +130,26 @@ struct SuffixArray {
     suffix_array = sa_is(in, unq);
   }
 
-  bool contains(const T& pattern) {
+  int find(const T& pattern) {
+    // O( |pattern| * log(|sequence|) )
+    // return starting position of given pattern in the sequence
+    // return -1 if not found
     int psize = pattern.size(), ssize = sequence.size();
-    auto compare = [&] (int index) {
-      int ofs = suffix_array[index];
-      for(int step = 0; step < psize; step++) {
-        if(ofs + step == ssize) return -1;
-        if(pattern[step] < sequence[ofs + step]) return  1;
-        if(pattern[step] > sequence[ofs + step]) return -1;
+    auto compare = [&] (int start) {
+      for(int i = 0; i < psize; i++) {
+        if(start + i == ssize) return -1;
+        if(pattern[i] < sequence[start + i]) return  1;
+        if(pattern[i] > sequence[start + i]) return -1;
       }
       return 0;
     };
-
-    int l = -1, r = sequence.size(); 
+    int l = -1, r = sequence.size();
     while(r-l > 1) {
       int m = l + (r-l) / 2;
-      if(compare(m) <= 0) l = m;
+      if(compare(suffix_array[m]) <= 0) l = m;
       else r = m;
     }
-    return l >= 0 && (compare(l) == 0);
+    return (l >= 0 && (compare(suffix_array[l]) == 0)) ? suffix_array[l] : -1;
   }
 };
 SuffixArray(const string &sequence) -> SuffixArray<string>;
