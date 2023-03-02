@@ -1,6 +1,5 @@
 struct modint {
-  //static const int MOD = 998244353; // Are they coprime?
-  static const int MOD = 1000000007; // Are they coprime?
+  static int MOD;
   long long val;
   modint(long long val=0) : val((val % MOD + MOD) % MOD){}
   modint operator-() const { return modint(-val); }
@@ -38,28 +37,5 @@ struct modint {
     return c;
   }
 };
-
-struct ModBinomial {
-  vector<modint> fact, fact_inv, inv;
-  ModBinomial(int n) : fact(n+1, 1), fact_inv(n+1, 1), inv(n+1, 1) {
-    /* O(n) */
-    assert(n < modint::MOD);
-    for (int i = 2; i <= n; i++) {
-      fact[i] = fact[i - 1] * i;
-      inv[i] = -inv[modint::MOD % i] * (modint::MOD / i);
-      fact_inv[i] = fact_inv[i - 1] * inv[i];
-    }
-  }
-#if 1
-  modint choose(int n, int k) { /* O(1) */ assert(n>=0 && k>=0); return n < k ? 0 : fact[n] * fact_inv[k] * fact_inv[n - k]; }
-#else
-  modint choose(long long n, int k) {
-    /* O(k) */
-    assert(n>=0 && k>=0 && k < modint::MOD);
-    modint c = 1;
-    for(int i=1; i<=k; i++) c *= modint(n-i+1);
-    return c * fact_inv[k];
-  }
-#endif
-  modint permutation(int n, int k) { /* O(1) */ assert(n>=0 && k>=0); return n < k ? 0 : fact[n] * fact_inv[n - k]; }
-};
+int modint::MOD = 998244353; // Are they coprime?
+//int modint::MOD = 1000000007; // Are they coprime?
