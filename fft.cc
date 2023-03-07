@@ -32,7 +32,8 @@ vector<complex<double>> fft(const vector<double> &input, bool inverse=false) {
   return c;
 }
 
-vector<double> convolution(const vector<double> &a, const vector<double> &b) {
+template<typename T>
+vector<T> convolution(const vector<T> &a, const vector<T> &b) {
   /* O(n log n) */
   assert(a.size() && b.size());
   int n = a.size() + b.size() - 1;
@@ -44,7 +45,10 @@ vector<double> convolution(const vector<double> &a, const vector<double> &b) {
   fft(A), fft(B);
   for(int i=0; i<p2; i++) A[i] *= B[i];
   fft(A, true);
-  vector<double> c(n);
-  for(int i=0; i<n; i++) c[i] = A[i].real();
+  vector<T> c(n);
+  for(int i=0; i<n; i++) {
+    if constexpr (is_floating_point<T>::value) c[i] = (T)A[i].real();
+    else c[i] = (T)round(A[i].real());
+  }
   return c;
 }
