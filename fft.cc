@@ -10,12 +10,15 @@ void fft(vector<complex<double>> &seq /* will be modified */, bool inverse = fal
     if(i<j) swap(seq[i], seq[j]);
   }
   constexpr double tau = 2 * acos(-1);
+  double t = tau / n * (inverse ? 1 : -1);
+  complex<double> zeta = complex<double>(cos(t), sin(t));
+  vector<complex<double>> zeta_pow(n, 1);
+  for(int i=1; i<n; ++i) zeta_pow[i] = zeta_pow[i-1] * zeta;
   for(int b=1; b<n; b <<= 1) {
     for(int j = 0; j < b; j++) {
-      complex<double> zeta = polar(1.0, tau / (2 * b) * j * (inverse ? 1 : -1));
       for(int k = 0; k < n; k += b * 2) {
         int l=j+k, r=j+k+b;
-        complex<double> sl = seq[l], sr = seq[r] * zeta;
+        complex<double> sl = seq[l], sr = seq[r] * zeta_pow[n / (2*b) * j];
         seq[l] = sl + sr, seq[r] = sl - sr;
       }
     }
