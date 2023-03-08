@@ -1,15 +1,14 @@
-void ntt(vector<modint> &seq /* will be modified */, bool inverse = false) {
+void ntt(vector<Modint<998244353>> &seq /* will be modified */, bool inverse = false) {
   /* O(n log n) */
   int n = seq.size();
   int ln = 0; // log2(n)
   while(1<<ln < n) ln++;
-  assert(modint::MOD == 998244353);
   assert(n == 1<<ln);
   assert(ln <= 23);
-  modint zeta = modint(3).pow(119);
+  auto zeta = Modint<998244353>(3).pow(119);
   for(int i=0; i<23-ln; ++i) zeta *= zeta;
   if(!inverse) zeta = zeta.inv();
-  vector<modint> zeta_pow(n, 1);
+  vector<Modint<998244353>> zeta_pow(n, 1);
   for(int i=1; i<n; ++i) zeta_pow[i] = zeta_pow[i-1] * zeta;
   for(int i=0; i<n; i++) {
     int j = 0;
@@ -20,16 +19,16 @@ void ntt(vector<modint> &seq /* will be modified */, bool inverse = false) {
     for(int j = 0; j < b; j++) {
       for(int k = 0; k < n; k += b * 2) {
         int l=j+k, r=j+k+b;
-        modint sl = seq[l], sr = seq[r] * zeta_pow[n / (2*b) * j];
+        auto sl = seq[l], sr = seq[r] * zeta_pow[n / (2*b) * j];
         seq[l] = sl + sr, seq[r] = sl - sr;
       }
     }
   }
-  modint ninv = modint(n).inv();
+  auto ninv = Modint<998244353>(n).inv();
   if(inverse) for(int i=0; i<n; i++) seq[i] *= ninv;
 }
 
-vector<modint> convolution(vector<modint> a, vector<modint> b) {
+vector<Modint<998244353>> convolution(vector<Modint<998244353>> a, vector<Modint<998244353>> b) {
   /* O(n log n) */
   assert(a.size() && b.size());
   int n = a.size() + b.size() - 1;
