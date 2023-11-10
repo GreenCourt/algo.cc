@@ -41,4 +41,4 @@ struct Modint {
   }
 };
 using modint = Modint<998244353>;
-//using mint = Modint<1000000007>;
+//using modint = Modint<1000000007>;
