@@ -115,3 +115,13 @@ using S = int;
 S op(S a, S b) { return gcd(a, b); }
 S e() { return 0; }
 #endif
+
+#if 0 /* Rolling hash */
+/*
+ *  pow_base must be initialized by base like vector<S>(n, {0,base})
+ */
+long long base = 100000007, mod = 1000000007;
+struct S { long long hash, pow_base; };
+S op(S a, S b) { return { (a.hash * b.pow_base % mod + b.hash) % mod, a.pow_base * b.pow_base % mod}; }
+S e() { return {0, 1}; }
+#endif
