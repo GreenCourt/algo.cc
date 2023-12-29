@@ -1,9 +1,9 @@
-mt19937_64 _rnd = mt19937_64(random_device()());
+mt19937_64 rnd_ = mt19937_64(random_device()());
 
 template<typename T>
 inline T randint(T mn, T mx) { // [mn, mx]
   assert(mn <= mx);
-  return uniform_int_distribution<T>(mn, mx)(_rnd);
+  return uniform_int_distribution<T>(mn, mx)(rnd_);
 }
 
 template<typename T>
@@ -12,7 +12,7 @@ vector<T> random_vector(int n, T mn, T mx) { // [mn, mx]
   assert(mn <= mx);
   uniform_int_distribution<T> dist(mn, mx);
   vector<T> a(n);
-  for(int i=0; i<n; ++i) a[i] = dist(_rnd);
+  for(int i=0; i<n; ++i) a[i] = dist(rnd_);
   return a;
 }
 
@@ -37,7 +37,7 @@ vector<T> random_permutation(T mn, T mx) { // [mn, mx]
   assert(mn <= mx);
   vector<T> a(mx - mn + 1);
   iota(a.begin(),a.end(),mn);
-  shuffle(a.begin(), a.end(), _rnd);
+  shuffle(a.begin(), a.end(), rnd_);
   return a;
 }
 
