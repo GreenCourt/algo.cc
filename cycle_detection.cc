@@ -1,42 +1,61 @@
-struct CycleDetection {
-  bool has_cycle = false;
-  vector<int> cycle; /* first found only */
-
-  CycleDetection(const vector<vector<int>> &adj) : adj(adj) {
-    /* O(|V| + |E|) */
-    int n = adj.size();
-    mark = vector(n, -1);
-    visited = vector(n, false);
-    for(int v=0; v<n; ++v) {
-      if(visited[v]) continue;
-      mark[v] = path.size();
-      path.push_back(v);
-      dfs(v);
-      mark[v] = -1;
-      path.pop_back();
-      if(has_cycle) break;
-    }
-  }
-
-  private:
-  const vector<vector<int>> &adj;
-  vector<bool> visited;
-  vector<int> mark, path;
-  void dfs(int v, int p=-1) {
-    visited[v] = true;
-    for(int u:adj[v]) if(u!=p) {
-      if(mark[u] != -1) {
-        has_cycle = true;
-        for(int i=mark[u]; i<path.size(); ++i) cycle.push_back(path[i]);
-        return;
+vector<int> detect_one_cycle(const vector<vector<int>> &adj, bool directed) {
+  /* O(|V| + |E|) */
+  int n = adj.size();
+  vector<int> parent(n, -1);
+  vector<bool> mark(n, false);
+  stack<pair<int,int>> dfs;
+  for(int s=0; s<n; ++s) {
+    if(parent[s] != -1) continue;
+    dfs.emplace(~s,s);
+    dfs.emplace(s,s);
+    while(dfs.size()) {
+      auto [v,p] = dfs.top(); dfs.pop();
+      if(v>=0) {
+        parent[v] = p;
+        mark[v] = true;
+        for(int u:adj[v]) {
+          if(!directed && u==p) continue;
+          if(mark[u]) {
+            // cycle detected
+            vector<int> cycle;
+            while(v!=u) {
+              cycle.push_back(v);
+              v = parent[v];
+            }
+            cycle.push_back(u);
+            reverse(cycle.begin(), cycle.end());
+            return cycle;
+          }
+          if(parent[u] != -1) continue;
+          dfs.emplace(~u,~v);
+          dfs.emplace(u,v);
+        }
+      } else { // dfs backword
+        v = ~v;
+        mark[v] = false;
       }
-      if(visited[u]) continue;
-      mark[u] = path.size();
-      path.push_back(u);
-      dfs(u,v);
-      mark[u] = -1;
-      path.pop_back();
-      if(has_cycle) return;
     }
   }
-};
+  return vector<int>(); // cycle not found
+}
+
+vector<vector<int>> detect_all_cycles_in_functional_graph(const vector<int> &adj) {
+  /* O(|V|) */
+  int n = adj.size();
+  vector<int> mark(n, -1);
+  vector<vector<int>> cycles;
+  for(int s=0; s<n; ++s) {
+    if(mark[s] != -1) continue;
+    int v = s;
+    mark[v] = s;
+    int u;
+    while(mark[u=adj[v]] == -1) mark[v=u] = s;
+    if(mark[u] != s) continue;
+    int stop = u;
+    cycles.push_back(vector<int>());
+    vector<int> &c = cycles.back();
+    c.push_back(u);
+    while(adj[u]!=stop) c.push_back(u = adj[u]);
+  }
+  return cycles;
+}
