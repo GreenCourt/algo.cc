@@ -14,7 +14,9 @@ int modpow(long long a, long long n, int mod) {
 int modinv(long long a, int mod) {
   /* O(log mod) */
   assert(a>=0);
-  //assert(gcd(a,mod)==1);
+#ifdef _GLIBCXX_ASSERTIONS
+  assert(gcd(a,mod)==1);
+#endif
   long long b = mod, u = 1, v = 0;
   while (b) {
     long long t = a / b;
