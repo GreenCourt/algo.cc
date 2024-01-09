@@ -13,4 +13,5 @@ struct Combinations {
     }
     return false;
   }
+  int operator[](int i) { return current[i];}
 };
