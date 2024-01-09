@@ -1,4 +1,5 @@
 struct Combinations {
+  // enumerate combinations in lexical order
   int n, r;
   vector<int> current;
   Combinations(int n, int r) : n(n), r(r) { /* O(r) */
