@@ -10,7 +10,7 @@ struct lazy_segment_tree {
   lazy_segment_tree(const vector<S>& initial) : n(int(initial.size())) {
     /* O(n) */
     int msb = 1;
-    height = 0;
+    height = 1;
     while((msb<<1) <= n) msb <<= 1, height++;
     leafs = (n==msb) ? n : msb << 1;
     node = vector<S>(2 * leafs, e());
