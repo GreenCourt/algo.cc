@@ -13,7 +13,8 @@ vector<int> detect_one_cycle(const vector<vector<int>> &adj, bool directed) {
       if(v>=0) {
         parent[v] = p;
         mark[v] = true;
-        for(int u:adj[v]) {
+        for(auto it=adj[v].rbegin(); it!=adj[v].rend(); ++it) {
+          int u = *it;
           if(!directed && u==p) continue;
           if(mark[u]) {
             // cycle detected
@@ -27,11 +28,12 @@ vector<int> detect_one_cycle(const vector<vector<int>> &adj, bool directed) {
             return cycle;
           }
           if(parent[u] != -1) continue;
-          dfs.emplace(~u,~v);
+          dfs.emplace(~u,v);
           dfs.emplace(u,v);
         }
       } else { // dfs backword
         v = ~v;
+        assert((parent[v] == p && mark[v]) || (parent[v] != p && !mark[v]));
         mark[v] = false;
       }
     }
