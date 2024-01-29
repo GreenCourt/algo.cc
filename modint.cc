@@ -22,6 +22,10 @@ struct Modint {
   Modint operator/(const Modint a) const { return (Modint)*this /= a; }
   bool operator==(const Modint &p) const { return val == p.val; }
   bool operator!=(const Modint &p) const { return val != p.val; }
+  template <typename T> friend Modint operator+(T t, const Modint& a) { static_assert(is_integral<T>::value, "not an integral type"); return a + t; }
+  template <typename T> friend Modint operator-(T t, const Modint& a) { static_assert(is_integral<T>::value, "not an integral type"); return -a + t; }
+  template <typename T> friend Modint operator*(T t, const Modint& a) { static_assert(is_integral<T>::value, "not an integral type"); return a * t; }
+  template <typename T> friend Modint operator/(T t, const Modint& a) { static_assert(is_integral<T>::value, "not an integral type"); return a.inv() * t; }
   friend ostream &operator<<(ostream &os, const Modint &p) { return os << p.val; }
   friend istream &operator>>(istream &is, Modint &a) { long long t; is >> t; a = Modint(t); return (is); }
   static int mod() { return MOD; }
