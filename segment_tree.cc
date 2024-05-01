@@ -1,5 +1,5 @@
 template <class S, S (*op)(S, S), S (*e)()> struct segment_tree {
-  segment_tree(int n=0) : segment_tree(vector<S>(n, e())) {}
+  segment_tree(int n_ = 0) : segment_tree(vector<S>(n_, e())) {}
   segment_tree(const vector<S>& initial) : n(int(initial.size())) {
     /* O(n) */
     int msb = 1; while((msb<<1) <= n) msb <<= 1;

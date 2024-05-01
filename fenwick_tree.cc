@@ -2,7 +2,7 @@ template<typename T=long long>
 struct fenwick_tree {
   int n;
   vector<T> node;
-  fenwick_tree(int n=0) : n(n), node(n) {}
+  fenwick_tree(int n_ = 0) : n(n_), node(n_) {}
   void add(int i, T x) {
     ++i;
     while(i<=n) {

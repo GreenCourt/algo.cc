@@ -7,7 +7,7 @@ struct RollingHash {
   // hash( [0,r) ) = sum([text[i] * pow(b, n-i-1) for i in range(n)])
   // hash( [l,r) ) = hash( [0,r) ) - pow(b, r - l) * hash( [0,l) )
 
-  RollingHash(const T& text, long long b = 100000007, long long mod = 1000000007) : text(text), n(text.size()), mod(mod) {
+  RollingHash(const T& text_, long long b = 100000007, long long mod_ = 1000000007) : text(text_), n(text_.size()), mod(mod_) {
       /* O(n) */
       assert(n > 0);
       pow_b = vector<long long>(n+1, 1LL);

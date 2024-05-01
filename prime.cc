@@ -1,7 +1,7 @@
 struct sieve {
   int n;
   vector<int> f, primes;
-  sieve(int n=1) : n(n), f(n+1, 0) {
+  sieve(int n_ = 1) : n(n_), f(n_ + 1, 0) {
     /* O(n log log n) */
     f[0] = f[1] = -1;
     for(int i=2; i<=n; i++) {

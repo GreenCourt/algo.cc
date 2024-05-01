@@ -105,7 +105,7 @@ struct SuffixArray {
   int operator[](int i) const { return suffix_array[i]; }
   size_t size() const { return sequence.size(); }
 
-  SuffixArray(const string& sequence) : sequence(sequence) {
+  SuffixArray(const string& sequence_) : sequence(sequence_) {
     /* O(n) */
     int n = sequence.size();
     vector<int> in(n);
@@ -114,7 +114,7 @@ struct SuffixArray {
   }
 
   template <typename S>
-  SuffixArray(const vector<S>& sequence) : sequence(sequence) {
+  SuffixArray(const vector<S>& sequence_) : sequence(sequence_) {
     /* O(n log n) */
     int n = sequence.size();
     // compression

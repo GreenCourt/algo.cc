@@ -11,7 +11,7 @@ struct RerootingDP {
   vector<vector<S>> dp;
   vector<S> ans;
 
-  RerootingDP(int n) : n(n), adj(n), vertex_info(n), edge_info(n), dp(n), ans(n, e()) {}
+  RerootingDP(int n_) : n(n_), adj(n_), vertex_info(n_), edge_info(n_), dp(n_), ans(n_, e()) {}
 
   void add_edge(int from, int to, const E& info=E()) {
     adj[from].push_back(to);

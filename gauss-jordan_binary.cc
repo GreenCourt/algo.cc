@@ -1,7 +1,7 @@
 using BitRow=bitset<1000>;
 struct BitMatrix {
   int rows, cols; vector<BitRow> matrix;
-  BitMatrix(int rows = 1, int cols = 1) : rows(rows), cols(cols), matrix(vector<BitRow>(rows)) {}
+  BitMatrix(int rows_ = 1, int cols_ = 1) : rows(rows_), cols(cols_), matrix(vector<BitRow>(rows_)) {}
   inline BitRow& operator [] (int i) {return matrix[i];}
 };
 

@@ -6,7 +6,7 @@ template <class S,
           F (*composition)(F, F),
           F (*id)()>
 struct lazy_segment_tree {
-  lazy_segment_tree(int n=0) : lazy_segment_tree(vector<S>(n, e())) {}
+  lazy_segment_tree(int n_ = 0) : lazy_segment_tree(vector<S>(n_, e())) {}
   lazy_segment_tree(const vector<S>& initial) : n(int(initial.size())) {
     /* O(n) */
     int msb = 1;

@@ -2,7 +2,7 @@ struct Combinations {
   // enumerate combinations in lexical order
   int n, r;
   vector<int> current;
-  Combinations(int n, int r) : n(n), r(r) { /* O(r) */
+  Combinations(int n_, int r_) : n(n_), r(r_) { /* O(r) */
     assert(n > 0 && r > 0 && r <= n);
     for (int i=0; i<r; ++i) current.push_back(i);
   }

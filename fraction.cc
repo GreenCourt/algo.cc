@@ -1,7 +1,7 @@
 struct Frac {
   long long numerator, denominator;
   constexpr static bool normalized = true;
-  Frac(long long numerator_=0, long long denominator_=1) : numerator(numerator_), denominator(denominator_) {
+  Frac(long long numerator_ = 0, long long denominator_ = 1) : numerator(numerator_), denominator(denominator_) {
     assert(denominator != 0);
     if(denominator < 0) numerator *= -1, denominator *= -1;
     if(numerator == 0) denominator = 1;

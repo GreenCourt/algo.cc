@@ -29,7 +29,7 @@ using Polygon = vector<Point>;
 struct Circle {
   Point center; Float r;
   Circle() = default;
-  Circle(const Point& center, Float r) : center(center), r(r) {}
+  Circle(const Point& center_, Float r_) : center(center_), r(r_) {}
 };
 
 Point operator*(const Point &p, const Float &d) { return Point(p.real()*d, p.imag()*d); }

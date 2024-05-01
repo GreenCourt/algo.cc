@@ -3,7 +3,7 @@ struct StringMatching {
   const T& pattern;
   vector<int> f;
   StringMatching() = default;
-  StringMatching(const T& pattern): pattern(pattern), f(vector<int>(pattern.size()+1)) {
+  StringMatching(const T& pattern_): pattern(pattern_), f(vector<int>(pattern_.size()+1)) {
     /* O(|pattern|) */
     f[0] = -1;
     int j = -1;

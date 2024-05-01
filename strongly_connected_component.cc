@@ -13,7 +13,7 @@ struct StronglyConnectedComponent {
                               //               |                                  |
                               //               ------------------------------------
                               //
-  StronglyConnectedComponent(const vector<vector<int>>& adj) : n(adj.size()), adj(adj) {
+  StronglyConnectedComponent(const vector<vector<int>>& adj_) : n(adj_.size()), adj(adj_) {
     /* O(|V|+|E|) */
     post_order.reserve(n); visited.assign(n,false);
     for(int v=0;v<n; ++v) if(!visited[v]) dfs(v);

@@ -6,7 +6,7 @@ struct Dinic {
   vector<vector<int>> adj_forward, adj_backward;
   vector<int> level;
 
-  Dinic(int n = 0) : n(n), adj_forward(n), adj_backward(n), level(n) { }
+  Dinic(int n_ = 0) : n(n_), adj_forward(n_), adj_backward(n_), level(n_) { }
 
   int add_edge(int from, int to, long long capacity) {
     /* O(1) */

@@ -1,7 +1,7 @@
 template <int MOD>
 struct Modint {
   long long val;
-  Modint(long long val=0) : val((val % MOD + MOD) % MOD){}
+  Modint(long long val_ = 0) : val((val_ % MOD + MOD) % MOD){}
   Modint operator-() const { return Modint(-val); }
   Modint& operator+=(const Modint a) { if ((val += a.val)     >= MOD) val -= MOD; return *this; }
   Modint& operator-=(const Modint a) { if ((val += MOD-a.val) >= MOD) val -= MOD; return *this; }
