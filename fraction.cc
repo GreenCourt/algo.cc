@@ -1,7 +1,7 @@
 struct Frac {
   long long numerator, denominator;
   constexpr static bool normalized = true;
-  Frac(long long numerator=0, long long denominator=1) : numerator(numerator), denominator(denominator) {
+  Frac(long long numerator_=0, long long denominator_=1) : numerator(numerator_), denominator(denominator_) {
     assert(denominator != 0);
     if(denominator < 0) numerator *= -1, denominator *= -1;
     if(numerator == 0) denominator = 1;
@@ -45,7 +45,7 @@ struct Frac {
 
 struct FracVector {
   long long x, y;
-  FracVector(long long x = 0, long long y = 0): x(x), y(y){}
+  FracVector(long long x_ = 0, long long y_ = 0): x(x_), y(y_){}
 
   inline bool arg_lt(const FracVector &f) const { return y*f.x < f.y*x; }
   inline bool arg_gt(const FracVector &f) const { return y*f.x > f.y*x; }
@@ -69,7 +69,7 @@ struct FracVector {
   bool operator==(const FracVector& a) const { return arg_eq(a);}
 #endif
 
-  friend istream &operator>>(istream& is, FracVector& p) {long long x,y; is >> x >> y; p = FracVector(x,y); return is; }
+  friend istream &operator>>(istream& is, FracVector& p) {long long x_,y_; is >> x_ >> y_; p = FracVector(x_,y_); return is; }
   friend ostream &operator<<(ostream& os, const FracVector& p) {os<<"("<<p.x<<","<<p.y<<")"; return os;}
 };
 

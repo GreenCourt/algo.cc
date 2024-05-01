@@ -22,7 +22,8 @@ struct tree_diameter {
       a = x.second;
     }
 
-    vector<long long> dist_from_a(n, -1); dist_from_a[a] = 0;
+    dist_from_a = vector<long long>(n, -1);
+    dist_from_a[a] = 0;
     stack<int> st; st.push(a);
     pair<long long,int> x = {-1, -1};
     while(st.size()) {
