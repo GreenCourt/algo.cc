@@ -184,7 +184,7 @@ vector<Point> cross_point(const Circle& c1, const Circle& c2) {
 Float signed_area(const Polygon& p) {
   /* O(N) */
   /* return positive value if clockwise else negative value */
-  Float a = 0; int n = p.size();
+  Float a = 0; int n = ssize(p);
   for(int i=0; i<n-1; ++i) a += cross(p[i], p[i+1]);
   a += cross(p[n-1], p[0]);
   a /= 2;
@@ -192,7 +192,7 @@ Float signed_area(const Polygon& p) {
 }
 
 bool is_convex(const Polygon& p) { /* O(N) */
-  int n = p.size();
+  int n = ssize(p);
   for(int i=0;i<n;i++) 
     if(ccw(p[(i+n-1)%n], p[i], p[(i+1)%n])==-1) return false;
   return true;
@@ -203,7 +203,7 @@ int contains(const Polygon& poly, const Point& p) {
   // return 0 if p is outside of poly
   //        1 if p is on the edge of poly
   //        2 if p is inside of poly
-  bool inside = false; int n = poly.size();
+  bool inside = false; int n = ssize(poly);
   for(int i=0; i<n; ++i) {
     Vector a = poly[i] - p, b = poly[(i+1)%n] - p;
     if(a.imag() > b.imag()) swap(a,b);
@@ -276,7 +276,7 @@ Float intersection_area(const Circle &c, const Polygon &poly) {
     return atan2(cross(from, to), dot(from, to)); /* range [-pi, pi] */
   };
   Float area = 0;
-  const int n = poly.size();
+  const int n = ssize(poly);
   for(int i=0;i<n;++i){
     const Point &p1 = poly[i] - c.center, &p2 = poly[(i + 1) % n] - c.center;
     if(abs(ccw(c.center, p1, p2)) != 1) continue;

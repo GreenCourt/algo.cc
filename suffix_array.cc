@@ -5,7 +5,7 @@ vector<int> sa_is(vector<int>& seq, int bucket_max) {
   if(seq.size() == 2) return (seq[0] < seq[1]) ? vector({0,1}) : vector({1,0});
 
   seq.push_back(0); // sentinel (will be removed later)
-  int n = seq.size();
+  int n = ssize(seq);
   bucket_max++;
   constexpr bool Stype = true, Ltype = false;
   vector<bool> type(n);
@@ -81,7 +81,7 @@ vector<int> sa_is(vector<int>& seq, int bucket_max) {
       int pos = 0;
       for(int i=0; i<n; ++i) if(input_rec[i] != -1) input_rec[pos++] = input_rec[i]; 
       input_rec.erase(input_rec.begin() + pos, input_rec.end());
-      assert(input_rec.size() == number_of_lms);
+      assert(ssize(input_rec) == number_of_lms);
     }
 
     vector<int> rec_sa;
@@ -89,7 +89,7 @@ vector<int> sa_is(vector<int>& seq, int bucket_max) {
     else rec_sa = sa_is(input_rec, unq);
 
     for(int i=0; i<number_of_lms; ++i) lms_sorted[i] = lms[rec_sa[i]];
-    assert(lms_sorted.size() == number_of_lms);
+    assert(ssize(lms_sorted) == number_of_lms);
     induce_sort(lms_sorted);
   }
   sa.erase(sa.begin()); // O(N)
@@ -107,7 +107,7 @@ struct SuffixArray {
 
   SuffixArray(const string& sequence_) : sequence(sequence_) {
     /* O(n) */
-    int n = sequence.size();
+    int n = ssize(sequence);
     vector<int> in(n);
     for(int i=0; i<n; ++i) in[i] = sequence[i];
     suffix_array = sa_is(in, 255);
@@ -116,7 +116,7 @@ struct SuffixArray {
   template <typename S>
   SuffixArray(const vector<S>& sequence_) : sequence(sequence_) {
     /* O(n log n) */
-    int n = sequence.size();
+    int n = ssize(sequence);
     // compression
     vector<int> idx(n);
     iota(idx.begin(), idx.end(), 0);
@@ -134,16 +134,16 @@ struct SuffixArray {
     // O( |pattern| * log(|sequence|) )
     // return starting position of given pattern in the sequence
     // return -1 if not found
-    int psize = pattern.size(), ssize = sequence.size();
+    int psz = ssize(pattern), ssz = ssize(sequence);
     auto compare = [&] (int start) {
-      for(int i = 0; i < psize; i++) {
-        if(start + i == ssize) return -1;
+      for(int i = 0; i < psz; i++) {
+        if(start + i == ssz) return -1;
         if(pattern[i] < sequence[start + i]) return  1;
         if(pattern[i] > sequence[start + i]) return -1;
       }
       return 0;
     };
-    int l = -1, r = sequence.size();
+    int l = -1, r = ssize(sequence);
     while(r-l > 1) {
       int m = l + (r-l) / 2;
       if(compare(suffix_array[m]) <= 0) l = m;
@@ -159,7 +159,7 @@ SuffixArray(const vector<S> &sequence) -> SuffixArray<vector<S>>;
 template<class T>
 vector<int> longest_common_prefix_array(const SuffixArray<T> &sa) {
   /* O(n) */
-  int n = sa.size();
+  int n = ssize(sa);
   assert(n >= 1);
   vector<int> rank(n);
   for (int i = 0; i < n; i++) rank[sa[i]] = i;

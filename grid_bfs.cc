@@ -1,6 +1,6 @@
 vector<vector<int>> bfs(const vector<string>& grid, int start_r, int start_c, char wall = '#', bool allow_diagonal = false) {
   /* O(rows * cols) */
-  int rows = grid.size(), cols = grid[0].size();
+  int rows = ssize(grid), cols = ssize(grid[0]);
   auto direction = allow_diagonal
     ? vector<pair<int,int>>({{0,-1}, {-1,0}, {1,0}, {0,1}, {-1,-1}, {-1,1}, {1,-1}, {1,1}})
     : vector<pair<int,int>>({{0,-1}, {-1,0}, {1,0}, {0,1}});

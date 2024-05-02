@@ -9,7 +9,7 @@ struct FordFulkerson {
 
   int add_edge(int from, int to, long long capacity) {
     /* O(1) */
-    int index = edges.size();
+    int index = ssize(edges);
     adj_forward[from].push_back(index);
     adj_backward[to].push_back(index);
     edges.push_back({from, to, capacity, 0});

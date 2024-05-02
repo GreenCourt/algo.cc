@@ -16,7 +16,7 @@ long long to_decimal(const string& x, int base) {
   /* O(|x|) */
   assert(2 <= base && base <= 9+26);
   long long r = 0, p = 1;
-  for(int i=x.size()-1; i>=0; --i) { 
+  for(int i=ssize(x)-1; i>=0; --i) {
     assert(('0' <= x[i] && x[i] <= min('9', char('0'+base-1))) || ('a' <= x[i] && x[i] <= char('a'-11+base)) || ('A' <= x[i] && x[i] <= char('A'-11+base)));
     int d = (x[i] >= 'a') ? (x[i]-'a'+10) : (x[i] >= 'A') ? (x[i]-'A'+10) : (x[i]-'0');
     r += p * d; p *= base;

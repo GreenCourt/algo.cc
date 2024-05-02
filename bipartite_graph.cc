@@ -6,7 +6,7 @@ struct BipartiteGraph {
 
   BipartiteGraph(const vector<vector<int>> &adj) {
     /* O(|V| + |E|) */
-    int n = adj.size();
+    int n = ssize(adj);
     color = vector<int>(n, -1);
     for(int i = 0; i<n; ++i) if(color[i] == -1) {
       connected_components.push_back({i});

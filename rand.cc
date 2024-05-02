@@ -76,13 +76,15 @@ pair<T,T> random_range(T mn, T mx, bool allow_same) { // [mn, mx]
 
 vector<pair<int,int>> random_graph(int n, int m) {
   /* O(n^2) */
+  assert(n >= 0);
+  assert(m >= 0);
   assert(m <= n*(n-1)/2);
   vector<pair<int,int>> edges; // 0-indexed edge list
   edges.reserve(m);
   int r = (n*(n-1) / 2) - 1;
   for(int a=0; a<n; ++a) for(int b=a+1; b<n; ++b)
-    if(randint(0, r--) < m - edges.size()) edges.emplace_back(a,b);
-  assert(edges.size() == m);
+    if(randint(0, r--) < m - ssize(edges)) edges.emplace_back(a,b);
+  assert(ssize(edges) == m);
   return edges;
 }
 
@@ -125,12 +127,14 @@ vector<pair<int,int>> random_tree(int n) {
   for(int v=0; v<n; ++v) if(count[v]) nonzero.push_back(v);
   assert(nonzero.size() == 2);
   edges.emplace_back(nonzero[0], nonzero[1]);
-  assert(edges.size() == n-1);
+  assert(ssize(edges) == n-1);
   return edges;
 }
 
 vector<pair<int,int>> random_connected_graph(int n, int m) {
   /* O(n^2) */
+  assert(n >= 0);
+  assert(m >= 0);
   assert(m <= n*(n-1)/2);
   assert(m >= n-1);
   vector<pair<int,int>> edges = random_tree(n); // 0-indexed edge list
@@ -142,12 +146,12 @@ vector<pair<int,int>> random_connected_graph(int n, int m) {
     check[u][v] = check[v][u] = true;
   }
 
-  int required = m - edges.size();
-  int candidates = (n*(n-1) / 2)  - edges.size();
+  int required = m - ssize(edges);
+  int candidates = (n*(n-1) / 2)  - ssize(edges);
   int r = candidates - 1;
   for(int a=0; a<n; ++a) for(int b=a+1; b<n; ++b) if(!check[a][b]) 
     if(randint(0, r--) < required) edges.emplace_back(a,b), required--;
-  assert(edges.size() == m);
+  assert(ssize(edges) == m);
   return edges;
 }
 
@@ -158,7 +162,7 @@ const string string_alphabet_uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 string random_string(int n, const string &population = string_digits + string_alphabet_lowercase + string_alphabet_uppercase) {
   /* O(n) */
   string r; r.reserve(n);
-  int sz = population.size();
+  int sz = ssize(population);
   for(int i=0; i<n; ++i) r.push_back(population[randint(0, sz-1)]);
   return r;
 }

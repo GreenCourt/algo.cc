@@ -1,6 +1,6 @@
 void ntt(vector<Modint<998244353>> &seq /* will be modified */, bool inverse = false) {
   /* O(n log n) */
-  int n = seq.size();
+  int n = ssize(seq);
   int ln = 0; // log2(n)
   while(1<<ln < n) ln++;
   assert(n == 1<<ln);
@@ -31,7 +31,7 @@ void ntt(vector<Modint<998244353>> &seq /* will be modified */, bool inverse = f
 vector<Modint<998244353>> convolution(vector<Modint<998244353>> a, vector<Modint<998244353>> b) {
   /* O(n log n) */
   assert(a.size() && b.size());
-  int n = a.size() + b.size() - 1;
+  int n = ssize(a) + ssize(b) - 1;
   int p2 = 1;
   while(p2 < n) p2 <<= 1;
   a.resize(p2); b.resize(p2);

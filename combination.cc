@@ -8,7 +8,7 @@ struct combination {
       c[i+1][j] += c[i][j], c[i+1][j+1] += c[i][j];
   }
   long long choose(int n, int k) {
-    assert(n>=0 && n<c.size() && k>=0);
+    assert(n>=0 && n<ssize(c) && k>=0);
     return c[n][k];
   }
 };

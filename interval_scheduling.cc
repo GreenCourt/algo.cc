@@ -1,7 +1,7 @@
 template<typename T>
 int interval_scheduling(const vector<pair<T,T>> &RL, bool half_open=false) {
   /* O(n log n) */
-  int n = RL.size();
+  int n = ssize(RL);
   if(n==0) return 0;
   vector rl(RL);
   sort(rl.begin(), rl.end()); 

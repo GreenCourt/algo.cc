@@ -18,7 +18,7 @@ int modinv(long long a, int mod) {
 
 int gauss_jordan(Matrix& A, int mod, bool is_extended = false) {
   /* O(rows * cols^2) */
-  int m = A.size(), n = A[0].size(); // m rows, n columns
+  int m = ssize(A), n = ssize(A[0]); // m rows, n columns
   for(int row = 0; row < m; ++row) for (int col = 0; col < n; ++col)
     A[row][col] = (A[row][col] % mod + mod) % mod;
   int rank = 0;
@@ -46,8 +46,8 @@ int gauss_jordan(Matrix& A, int mod, bool is_extended = false) {
 
 pair<int, Vector> linear_equations(Matrix& A, Vector& b, int mod) {
   /* O(rows * cols^2) */
-  int m = A.size(), n = A[0].size(); // m rows, n cols
-  assert(b.size() == m);
+  int m = ssize(A), n = ssize(A[0]); // m rows, n cols
+  assert(ssize(b) == m);
   Matrix ex(m, Vector(n+1));
   for(int i=0; i<m; ++i) for(int j=0; j<n; ++j) ex[i][j] = A[i][j];
   for(int i=0; i<m; ++i) ex[i][n] = b[i];

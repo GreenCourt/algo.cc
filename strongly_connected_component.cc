@@ -13,7 +13,7 @@ struct StronglyConnectedComponent {
                               //               |                                  |
                               //               ------------------------------------
                               //
-  StronglyConnectedComponent(const vector<vector<int>>& adj_) : n(adj_.size()), adj(adj_) {
+  StronglyConnectedComponent(const vector<vector<int>>& adj_) : n(ssize(adj_)), adj(adj_) {
     /* O(|V|+|E|) */
     post_order.reserve(n); visited.assign(n,false);
     for(int v=0;v<n; ++v) if(!visited[v]) dfs(v);
@@ -37,7 +37,7 @@ struct StronglyConnectedComponent {
     post_order.push_back(v);
   }
   void rdfs(int v) {
-    group_number[v] = groups.size()-1;
+    group_number[v] = ssize(groups)-1;
     groups.back().push_back(v);
     for(int u : radj[v]) if(group_number[u]==-1) rdfs(u);
   }

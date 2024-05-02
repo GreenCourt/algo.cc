@@ -26,7 +26,7 @@ struct RerootingDP {
 
   private:
   S dfs(int v, int p=-1) {
-    int deg = adj[v].size();
+    int deg = ssize(adj[v]);
     dp[v] = vector<S>(deg, e());
     S x = e();
     for(int i=0; i<deg; i++) {
@@ -39,7 +39,7 @@ struct RerootingDP {
   }
 
   void reroot(int v, int p=-1, const S& pval=e()) {
-    int deg = adj[v].size();
+    int deg = ssize(adj[v]);
     for(int i=0; i<deg; i++) if(adj[v][i] == p) {
       dp[v][i] = pval;
       break;

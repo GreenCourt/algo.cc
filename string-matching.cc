@@ -7,7 +7,7 @@ struct StringMatching {
     /* O(|pattern|) */
     f[0] = -1;
     int j = -1;
-    for (int i = 0; i < pattern.size(); ++i) {
+    for (int i = 0; i < ssize(pattern); ++i) {
       while (j != -1 && pattern[j] != pattern[i]) j = f[j];
       f[i+1] = ++j;
     }
@@ -17,9 +17,9 @@ struct StringMatching {
     /* O(|text|) */
     vector<int> index;
     int j = 0;
-    for (int i = 0; i < text.size(); ++i) {
+    for (int i = 0; i < ssize(text); ++i) {
       while (j != -1 && pattern[j] != text[i]) j = f[j];
-      if (++j == pattern.size()) {
+      if (++j == ssize(pattern)) {
         index.push_back(i-j+1);
         j = f[j];
       }

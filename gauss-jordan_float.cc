@@ -4,7 +4,7 @@ using Matrix = vector<Vector>;
 
 int gauss_jordan(Matrix& A, bool is_extended = false) {
   /* O(rows * cols^2) */
-  int m = A.size(), n = A[0].size(); // m rows, n columns
+  int m = ssize(A), n = ssize(A[0]); // m rows, n columns
   int rank = 0;
   for (int col = 0; col < n; ++col) {
     if (is_extended && col == n-1) break;
@@ -29,8 +29,8 @@ int gauss_jordan(Matrix& A, bool is_extended = false) {
 
 Vector linear_equations(Matrix& A, Vector& b) {
   /* O(rows * cols^2) */
-  int m = A.size(), n = A[0].size(); // m rows, n cols
-  assert(b.size() == m);
+  int m = ssize(A), n = ssize(A[0]); // m rows, n cols
+  assert(ssize(b) == m);
   Matrix ex(m, Vector(n+1));
   for (int i=0; i<m; ++i) for (int j=0; j<n; ++j) ex[i][j] = A[i][j];
   for(int i=0; i<m; ++i) ex[i][n] = b[i];

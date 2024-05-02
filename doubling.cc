@@ -1,7 +1,7 @@
 struct Doubling {
   vector<vector<int>> dbl;
   Doubling(const vector<int> &single_move, long long k) { /* O(n log k) */
-    int n=single_move.size(), log2k = log2floor(k);
+    int n = ssize(single_move), log2k = log2floor(k);
     dbl.assign(log2k+1, vector<int>(n));
     dbl[0] = vector(single_move);
     for(int i=0; i<log2k; ++i) for(int x=0; x<n; ++x) dbl[i+1][x] = dbl[i][dbl[i][x]];

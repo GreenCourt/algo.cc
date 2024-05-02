@@ -5,13 +5,13 @@ struct SparseTable {
   SparseTable() = default;
   SparseTable(const vector<T> &init) { /* O(n log n) */
     int b = 0;
-    while((1 << b) <= init.size()) ++b;
+    while((1 << b) <= ssize(init)) ++b;
     st.assign(b, vector<T>(1 << b));
-    for(int i = 0; i < init.size(); i++) st[0][i] = init[i];
+    for(int i = 0; i < ssize(init); i++) st[0][i] = init[i];
     for(int i = 1; i < b; i++) for(int j = 0; j + (1 << i) <= (1 << b); j++) 
       st[i][j] = min(st[i - 1][j], st[i - 1][j + (1 << (i - 1))]);
     lg.resize(init.size() + 1);
-    for(int i = 2; i < lg.size(); i++) lg[i] = lg[i >> 1] + 1;
+    for(int i = 2; i < ssize(lg); i++) lg[i] = lg[i >> 1] + 1;
   }
   inline T rmq(int l, int r) { /* O(1) */
     assert(l<r);
@@ -27,7 +27,7 @@ struct LowestCommonAncestor {
   SparseTable<pair<int,int>> st;
   vector<int> depth, parent;
   LowestCommonAncestor(const vector<vector<edge>>& adj, int root = 0) { /* O(n log n) */
-    int n = adj.size(); if(n==0) return;
+    int n = ssize(adj); if(n==0) return;
     depth.assign(n, -1);
     parent.assign(n, -1);
     first_appear.assign(n, -1);
@@ -56,7 +56,7 @@ struct LowestCommonAncestor {
   }
   private:
   void dfs(int v, int d, const vector<vector<edge>>& adj) {
-    first_appear[v] = eular_tour.size(), depth[v] = d;
+    first_appear[v] = ssize(eular_tour), depth[v] = d;
     eular_tour.emplace_back(d, v);
     for(int u : adj[v]) if(first_appear[u] == -1) {
       parent[u] = v;

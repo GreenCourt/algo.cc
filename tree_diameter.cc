@@ -6,7 +6,7 @@ struct tree_diameter {
 
   tree_diameter(const vector<vector<edge>>& adj) {
     /* O(|V|+|E|) */
-    int n = adj.size();
+    int n = ssize(adj);
     {
       vector<long long> dist_from_0(n, -1); dist_from_0[0] = 0;
       stack<int> st; st.push(0);

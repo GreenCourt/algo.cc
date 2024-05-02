@@ -1,6 +1,6 @@
 vector<int> detect_one_cycle(const vector<vector<int>> &adj, bool directed) {
   /* O(|V| + |E|) */
-  int n = adj.size();
+  int n = ssize(adj);
   vector<int> parent(n, -1);
   vector<bool> mark(n, false);
   stack<pair<int,int>> dfs;
@@ -43,7 +43,7 @@ vector<int> detect_one_cycle(const vector<vector<int>> &adj, bool directed) {
 
 vector<vector<int>> detect_all_cycles_in_functional_graph(const vector<int> &adj) {
   /* O(|V|) */
-  int n = adj.size();
+  int n = ssize(adj);
   vector<int> mark(n, -1);
   vector<vector<int>> cycles;
   for(int s=0; s<n; ++s) {

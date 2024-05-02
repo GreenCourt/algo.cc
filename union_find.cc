@@ -14,14 +14,14 @@ struct UnionFind {
   int root(int x) { return data[x] < 0 ? x : data[x] = root(data[x]); }
   int size(int x) { return -data[root(x)]; }
   vector<vector<int>> groups() { /* O(n) */
-    int n = data.size();
+    int n = ssize(data);
     vector<int> r(n), group_size(n);
     for (int i = 0; i < n; i++) { r[i] = root(i); group_size[r[i]]++; }
     vector<vector<int>> result(n);
     for (int i = 0; i < n; i++) result[i].reserve(group_size[i]);
     for (int i = 0; i < n; i++) result[r[i]].push_back(i);
     result.erase(remove_if(result.begin(), result.end(), [&](const vector<int>& v) { return v.empty(); }), result.end());
-    assert(result.size() == number_of_groups);
+    assert(ssize(result) == number_of_groups);
     return result;
   }
 };

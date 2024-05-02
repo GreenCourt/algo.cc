@@ -9,9 +9,9 @@ vector<vector<T>> Imos2D(
     ) {
   /* O(x_max*y_max + A.size()) */
   vector d(x_max+1, vector<T>(y_max+1));
-  int sz = val.size();
-  assert(sz == x_begin.size() && sz == x_end.size());
-  assert(sz == y_begin.size() && sz == y_end.size());
+  int sz = ssize(val);
+  assert(sz == ssize(x_begin) && sz == ssize(x_end));
+  assert(sz == ssize(y_begin) && sz == ssize(y_end));
   for(int i=0; i<sz; ++i) {
     assert(0 <= x_begin[i] && x_begin[i] <= x_end[i] && x_end[i] <= x_max+1);
     assert(0 <= y_begin[i] && y_begin[i] <= y_end[i] && y_end[i] <= y_max+1);

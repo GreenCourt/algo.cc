@@ -10,7 +10,7 @@ pair<long long,long long> crt(const vector<long long> &r, const vector<long long
   // O(n log lcm(m[i]))
   assert(r.size() == m.size());
   auto mod=[&](long long a,long long k){return (a%k+k)%k;}; // a mod k for negative a
-  long long r_ = 0, lcm = 1; int n = r.size();
+  long long r_ = 0, lcm = 1; int n = ssize(r);
   for(int i=0; i<n; ++i) {
     long long ri = mod(r[i],m[i]), mi = m[i];
     assert(mi > 0);
