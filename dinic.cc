@@ -1,5 +1,4 @@
 struct Dinic {
-  const long long INF=1e18;
   int n;
   struct edge {int from, to; long long capacity, flow;};
   vector<edge> edges, backward_edges;

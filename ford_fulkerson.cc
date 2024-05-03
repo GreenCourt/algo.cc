@@ -1,5 +1,5 @@
 struct FordFulkerson {
-  const static long long INF=1e18;
+  const static long long INF=numeric_limits<long long>::max()/2;
   int n;
   struct edge {int from, to; long long capacity, flow;};
   vector<edge> edges, backward_edges;

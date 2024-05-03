@@ -9,7 +9,7 @@ void fft(vector<complex<double>> &seq /* will be modified */, bool inverse = fal
     for(int k=0; k<ln; k++) j |= (i >> k & 1) << (ln - 1 - k);
     if(i<j) swap(seq[i], seq[j]);
   }
-  constexpr double tau = 2 * acos(-1);
+  constexpr double tau = 2 * numbers::pi;
   double t = tau / n * (inverse ? 1 : -1);
   complex<double> zeta = complex<double>(cos(t), sin(t));
   vector<complex<double>> zeta_pow(n, 1);

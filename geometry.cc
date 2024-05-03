@@ -1,5 +1,5 @@
 using Float = double;
-const Float EPS=1e-9, PI = acos(-1.0);
+const Float EPS=1e-9;
 inline int sgn(const Float a) {return (a < -EPS ? -1 : (a > EPS ? +1 : 0));}
 
 using Point = complex<Float>;
@@ -81,8 +81,8 @@ int ccw(const Point &s, Point t, Point x) {
   return 0;                              // ON_SEGMENT        : line up s-x-t
 }
 
-Float radian2degree(const Float &radian) {return radian * 180.0 / PI;}
-Float degree2radian(const Float &degree) {return degree * PI / 180.0;}
+Float radian2degree(const Float &radian) {return radian * 180.0 / numbers::pi;}
+Float degree2radian(const Float &degree) {return degree * numbers::pi / 180.0;}
 
 Point projection(const Line &l, const Point &p){return l[0]+(dot(p-l[0], l[1]-l[0])/norm(l[1]-l[0]))*(l[1]-l[0]);}
 Point projection(const Segment &l, const Point &p){return l[0]+(dot(p-l[0], l[1]-l[0])/norm(l[1]-l[0]))*(l[1]-l[0]);}
@@ -311,7 +311,7 @@ Float intersection_area(const Circle &c, const Polygon &poly) {
 Float intersection_area(const Circle &c1, const Circle &c2) {
   int ct = number_of_common_tangents(c1,c2);
   if(ct==3 || ct==4) return 0;
-  if(ct==0 || ct==1) return min(c1.r*c1.r*PI, c2.r*c2.r*PI);
+  if(ct==0 || ct==1) return min(c1.r*c1.r*numbers::pi, c2.r*c2.r*numbers::pi);
   auto cp = cross_point(c1,c2);
   assert(cp.size() == 2);
   Float d = abs(c1.center - c2.center), r1 = c1.r, r2 = c2.r;
