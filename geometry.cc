@@ -213,7 +213,7 @@ int contains(const Polygon& poly, const Point& p) {
   return inside ? 2 : 0;
 }
 
-bool contains(const Circle &c, const Point &p) {
+int contains(const Circle &c, const Point &p) {
   Float d = abs(p - c.center);
   if (sgn(d - c.r) == 0) return 2;     // on the edge
   else if (sgn(d - c.r) < 0) return 1; // inside
