@@ -199,6 +199,24 @@ bool is_convex(const Polygon& p) { /* O(N) */
   return true;
 }
 
+Polygon convex_cut(const Polygon &convex, const Point &s, const Point &t) { /* O(N) */
+#ifdef _GLIBCXX_ASSERTIONS
+  assert(is_convex(convex));
+#endif
+  // return the left side of the convex cut by the line from s to t
+  int n = ssize(convex);
+  Line line(s,t);
+  Polygon left;
+  for(int i=0; i<n; ++i) {
+    const Point &p = convex[i], &q = convex[(i+1)%n];
+    int ccw_p = ccw(s, t, p), ccw_q = ccw(s, t, q);
+    if(ccw_p != -1) left.push_back(p);
+    if(abs(ccw_q) == 1 && ccw_p * ccw_q < 0)
+      left.push_back(cross_point(Line(p, q), line));
+  }
+  return left;
+}
+
 int contains(const Polygon& poly, const Point& p) {
   /* O(N) */
   // return 0 if p is outside of poly
@@ -324,19 +342,4 @@ Float intersection_area(const Circle &c1, const Circle &c2) {
   area -= r1*sin(a1) * r1*cos(a1);
   area -= r2*sin(a2) * r2*cos(a2);
   return area;
-}
-
-Polygon convex_cut(const Polygon &poly, const Point &s, const Point &t) {
-  // return the left side of the poly cut by the line from s to t
-  int n = ssize(poly);
-  Line line(s,t);
-  Polygon left;
-  for(int i=0; i<n; ++i) {
-    const Point &p = poly[i], &q = poly[(i+1)%n];
-    int ccw_p = ccw(s, t, p), ccw_q = ccw(s, t, q);
-    if(ccw_p != -1) left.push_back(p);
-    if(abs(ccw_q) == 1 && ccw_p * ccw_q < 0)
-      left.push_back(cross_point(Line(p, q), line));
-  }
-  return left;
 }
