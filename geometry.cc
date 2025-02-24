@@ -38,7 +38,7 @@ Point rotate(Float theta_radian, const Point &p) {
   return Point(cos(theta_radian) * p.real() - sin(theta_radian) * p.imag(),
       sin(theta_radian) * p.real() + cos(theta_radian) * p.imag());
 }
-Point rotate90(const Point &p) {return Point(-p.imag(), p.real());}
+inline Point rotate90(const Point &p) {return Point(-p.imag(), p.real());}
 
 inline bool coordinate_lt(const Point& a, const Point& b) { return sgn(real(a-b)) ? real(a-b) < 0 : sgn(imag(a-b)) < 0; }
 inline bool coordinate_gt(const Point& a, const Point& b) { return sgn(real(a-b)) ? real(a-b) > 0 : sgn(imag(a-b)) > 0; }
@@ -61,6 +61,7 @@ namespace std {
 
 Float dot(const Point &a, const Point &b){return a.real()*b.real()+a.imag()*b.imag();}    // |a||b|cos()
 Float cross(const Point &a, const Point &b) {return a.real()*b.imag()-a.imag()*b.real();} // |a||b|sin()
+Float angle(const Point& from, const Point& to) { return arg(conj(from)*to); /* (-pi, pi] */ }
 
 bool is_parallel(const Point &a, const Point &b) {return sgn(cross(a,b)) == 0;}
 bool is_parallel(const Line &a, const Line &b) {return sgn(cross(a[1] - a[0], b[1] - b[0])) == 0;}
@@ -88,6 +89,9 @@ Point projection(const Line &l, const Point &p){return l[0]+(dot(p-l[0], l[1]-l[
 Point projection(const Segment &l, const Point &p){return l[0]+(dot(p-l[0], l[1]-l[0])/norm(l[1]-l[0]))*(l[1]-l[0]);}
 Point reflection(const Line &l, const Point &p){return p+(projection(l,p)-p)*2.0;}
 bool same(const Line &a, const Line &b){return (sgn(cross(a[1]-a[0], b[1]-b[0]))==0)&&(sgn(cross(a[1]-a[0], b[0]-a[0]))==0);}
+inline Line perpendicular_line(const Line &line, const Point& p) {
+  return Line((line[0] + line[1]) / 2, rotate90(line[1] - line[0]) + p);
+}
 
 bool intersect(const Line &l, const Point &p) { return abs(ccw(l[0], l[1], p)) != 1; }
 bool intersect(const Line &a, const Line &b) { return sgn(cross(a[1]-a[0], b[1]-b[0]))!=0 || sgn(cross(a[1]-a[0], b[1]-a[0]))==0; }
