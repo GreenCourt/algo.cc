@@ -194,7 +194,7 @@ Float signed_area(const Polygon& p) {
 
 bool is_convex(const Polygon& p) { /* O(N) */
   int n = ssize(p);
-  for(int i=0;i<n;i++) 
+  for(int i=0;i<n;i++)
     if(ccw(p[(i+n-1)%n], p[i], p[(i+1)%n])==-1) return false;
   return true;
 }
@@ -234,8 +234,8 @@ int contains(const Polygon& poly, const Point& p) {
 
 int contains(const Circle &c, const Point &p) {
   Float d = abs(p - c.center);
-  if (sgn(d - c.r) == 0) return 2;     // on the edge
-  else if (sgn(d - c.r) < 0) return 1; // inside
+  if (sgn(d - c.r) == 0) return 1;     // on the edge
+  else if (sgn(d - c.r) < 0) return 2; // inside
   else return 0;                       // outside
 }
 
