@@ -61,7 +61,10 @@ namespace std {
 
 Float dot(const Point &a, const Point &b){return a.real()*b.real()+a.imag()*b.imag();}    // |a||b|cos()
 Float cross(const Point &a, const Point &b) {return a.real()*b.imag()-a.imag()*b.real();} // |a||b|sin()
-Float angle(const Point& from, const Point& to) { return arg(conj(from)*to); /* (-pi, pi] */ }
+Float angle(const Point& from, const Point& to) {
+  assert(abs(from)>EPS && abs(to)>EPS);
+  return arg(conj(from)*to); /* (-pi, pi] */
+}
 
 bool is_parallel(const Point &a, const Point &b) {return sgn(cross(a,b)) == 0;}
 bool is_parallel(const Line &a, const Line &b) {return sgn(cross(a[1] - a[0], b[1] - b[0])) == 0;}
