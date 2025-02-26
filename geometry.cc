@@ -206,6 +206,26 @@ bool is_convex(const Polygon& p) { /* O(N) */
   return true;
 }
 
+Polygon make_convex_hull(vector<Point> points) { /* O(n log n) */
+  int n = ssize(points);
+  assert(n >= 3);
+  sort(points.begin(), points.end(), [](const Point &l, const Point &r) {
+      return sgn(imag(l-r)) ? imag(l-r) < 0 : sgn(real(l-r)) < 0; });
+  Polygon convex = { points[0], points[1] };
+  for(int i=2; i<n; ++i) {
+    Point &p = points[i];
+    while(ssize(convex) > 1 && ccw(convex[convex.size()-2], convex.back(), p) == -1) convex.pop_back();
+    convex.push_back(p);
+  }
+  for(int i=n-2, t=ssize(convex); i>=0; --i) {
+    Point &p = points[i];
+    while(ssize(convex) > t && ccw(convex[convex.size()-2], convex.back(), p) == -1) convex.pop_back();
+    convex.push_back(p);
+  }
+  convex.pop_back();
+  return convex;
+}
+
 Polygon convex_cut(const Polygon &convex, const Point &s, const Point &t) { /* O(N) */
 #ifdef _GLIBCXX_ASSERTIONS
   assert(is_convex(convex));
