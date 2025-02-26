@@ -244,6 +244,28 @@ Polygon convex_cut(const Polygon &convex, const Point &s, const Point &t) { /* O
   return left;
 }
 
+Float diameter(const Polygon &poly) {
+  int n = ssize(poly);
+  assert(n>=3);
+  int c = 0; // 1 if COUNTER_CLOCKWISE else -1
+  for(int i=0; i<n; ++i) if(abs(c = ccw(poly[i], poly[(i+1)%n], poly[(i+2)%n])) == 1) break;
+  assert(abs(c)==1);
+  auto lt=[](const Point& l, const Point &r) {
+    return sgn(real(l-r)) ? real(l-r) < 0 : sgn(imag(l-r)) < 0; };
+  int i=0, j=0;
+  for(int k=0; k<n; ++k) {
+    if(!lt(poly[i], poly[k])) i=k;
+    if(lt(poly[j], poly[k])) j=k;
+  }
+  double d = 0; int start_i = i, start_j = j;
+  while(i != start_j || j != start_i) {
+    d = max(d, abs(poly[i] - poly[j]));
+    if(c*cross(poly[(i+1)%n] - poly[i], poly[(j+1)%n] - poly[j]) < 0) i = (i+1) % n;
+    else j = (j+1) % n;
+  }
+  return d;
+}
+
 int contains(const Polygon& poly, const Point& p) {
   /* O(N) */
   // return 0 if p is outside of poly
